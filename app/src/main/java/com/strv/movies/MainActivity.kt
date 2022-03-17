@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.strv.movies.data.OfflineMoviesProvider
-import com.strv.movies.ui.movieslist.MoviesList
+import com.strv.movies.ui.moviedetail.MovieDetail
 import com.strv.movies.ui.theme.MoviesTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,8 +20,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             MoviesTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    MoviesList(movies = OfflineMoviesProvider.getMovies())
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.background
+                ) {
+                    MovieDetail(movie = OfflineMoviesProvider.getMovieDetail(1))
                 }
             }
         }
