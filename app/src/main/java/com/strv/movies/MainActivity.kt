@@ -3,16 +3,17 @@ package com.strv.movies
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.strv.movies.data.OfflineMoviesProvider
 import com.strv.movies.ui.moviedetail.MovieDetail
 import com.strv.movies.ui.theme.MoviesTheme
@@ -32,7 +33,18 @@ class MainActivity : ComponentActivity() {
                             title = {
                                 Text(text = stringResource(id = R.string.app_name))
                             },
-                            backgroundColor = MaterialTheme.colors.primary
+                            backgroundColor = MaterialTheme.colors.primary,
+                            actions = {
+                                Icon(
+                                    modifier = Modifier
+                                        .padding(end = 12.dp)
+                                        .clickable {
+
+                                        },
+                                    painter = painterResource(id = R.drawable.ic_light),
+                                    contentDescription = null,
+                                )
+                            }
                         )
                         MovieDetail(movie = OfflineMoviesProvider.getMovieDetail(1))
                     }
