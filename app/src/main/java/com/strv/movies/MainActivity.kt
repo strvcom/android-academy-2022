@@ -54,7 +54,13 @@ class MainActivity : ComponentActivity() {
                                             isDarkTheme.value = !isDarkTheme.value
                                             changeStatusBarColor(isDarkTheme.value)
                                         },
-                                    painter = painterResource(id = R.drawable.ic_light),
+                                    painter = painterResource(
+                                        id = if (isDarkTheme.value) {
+                                            R.drawable.ic_light
+                                        } else {
+                                            R.drawable.ic_dark
+                                        }
+                                    ),
                                     contentDescription = null,
                                 )
                             }
