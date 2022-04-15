@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -42,27 +43,7 @@ class MainActivity : ComponentActivity() {
                             },
                             backgroundColor = MaterialTheme.colors.primary,
                             actions = {
-                                Icon(
-                                    modifier = Modifier
-                                        .padding(end = 12.dp)
-                                        .clickable(
-                                            interactionSource = remember {
-                                                MutableInteractionSource()
-                                            },
-                                            indication = rememberRipple(bounded = false),
-                                        ) {
-                                            isDarkTheme.value = !isDarkTheme.value
-                                            changeStatusBarColor(isDarkTheme.value)
-                                        },
-                                    painter = painterResource(
-                                        id = if (isDarkTheme.value) {
-                                            R.drawable.ic_light
-                                        } else {
-                                            R.drawable.ic_dark
-                                        }
-                                    ),
-                                    contentDescription = null,
-                                )
+                                DarkLightModeSwitchIcon(isDarkTheme = isDarkTheme)
                             }
                         )
                         MovieDetail(movie = OfflineMoviesProvider.getMovieDetail(1))
@@ -70,6 +51,31 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    @Composable
+    private fun DarkLightModeSwitchIcon(isDarkTheme: MutableState<Boolean>) {
+        Icon(
+            modifier = Modifier
+                .padding(end = 12.dp)
+                .clickable(
+                    interactionSource = remember {
+                        MutableInteractionSource()
+                    },
+                    indication = rememberRipple(bounded = false),
+                ) {
+                    isDarkTheme.value = !isDarkTheme.value
+                    changeStatusBarColor(isDarkTheme.value)
+                },
+            painter = painterResource(
+                id = if (isDarkTheme.value) {
+                    R.drawable.ic_light
+                } else {
+                    R.drawable.ic_dark
+                }
+            ),
+            contentDescription = null,
+        )
     }
 
     private fun changeStatusBarColor(isDarkMode: Boolean) {
