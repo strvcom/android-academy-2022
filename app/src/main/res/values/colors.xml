@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="statusBar">#FF006a60</color>
+    <color name="statusBar">@color/statusBarLightMode</color>
+
+    <color name="statusBarLightMode">#FF006a60</color>
+    <color name="statusBarDarkMode">#FF51dbcc</color>
 </resources>

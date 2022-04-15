@@ -52,6 +52,7 @@ class MainActivity : ComponentActivity() {
                                             indication = rememberRipple(bounded = false),
                                         ) {
                                             isDarkTheme.value = !isDarkTheme.value
+                                            changeStatusBarColor(isDarkTheme.value)
                                         },
                                     painter = painterResource(id = R.drawable.ic_light),
                                     contentDescription = null,
@@ -63,6 +64,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun changeStatusBarColor(isDarkMode: Boolean) {
+        val color = if (isDarkMode) R.color.statusBarDarkMode else R.color.statusBarLightMode
+        window.statusBarColor = resources.getColor(color, this@MainActivity.theme)
     }
 }
 
