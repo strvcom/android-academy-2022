@@ -7,6 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -37,7 +38,10 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
-fun MoviesList(movies: List<Movie>) {
+fun MoviesList(
+    movies: List<Movie>,
+    onMovieClick: (movieId: Int) -> Unit,
+) {
     LazyVerticalGrid(
         modifier = Modifier.padding(8.dp),
         cells = GridCells.Fixed(2)
@@ -55,7 +59,9 @@ fun MoviesList(movies: List<Movie>) {
             ) {
                 MovieItem(
                     movie = movie,
-                    modifier = Modifier.animateItemPlacement()
+                    modifier = Modifier
+                        .animateItemPlacement()
+                        .clickable { onMovieClick(movie.id) }
                 )
             }
         }
