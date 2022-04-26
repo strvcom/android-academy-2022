@@ -24,6 +24,8 @@ import com.strv.movies.data.OfflineMoviesProvider
 import com.strv.movies.ui.movieslist.MoviesList
 import com.strv.movies.ui.theme.MoviesTheme
 
+//some change
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
