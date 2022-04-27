@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -31,7 +32,7 @@ import com.strv.movies.model.MovieDetail
 @Composable
 fun MovieDetail(movie: MovieDetail) {
     Column {
-        val (videoProgress, setVideoProgress) = remember { mutableStateOf(0f) }
+        val (videoProgress, setVideoProgress) = rememberSaveable { mutableStateOf(0f) }
         Log.d("TAG", "MovieDetail: $videoProgress")
 
         MovieTrailerPlayer(
