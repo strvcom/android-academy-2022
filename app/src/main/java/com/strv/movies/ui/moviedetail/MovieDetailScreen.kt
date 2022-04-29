@@ -31,14 +31,22 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import com.strv.movies.R
 import com.strv.movies.data.OfflineMoviesProvider
 import com.strv.movies.model.MovieDetail
+import com.strv.movies.ui.error.ErrorScreen
+import com.strv.movies.ui.loading.LoadingScreen
 
 @Composable
 fun MovieDetailScreen(
     viewModel: MovieDetailViewModel = viewModel()
 ) {
-    val movie by viewModel.movie.collectAsState()
+    val viewState by viewModel.viewState.collectAsState()
 
-    MovieDetail(movie = movie)
+    if (viewState.loading) {
+        LoadingScreen()
+    } else if (viewState.error != null) {
+        ErrorScreen(errorMessage = viewState.error!!)
+    } else {
+        viewState.movie?.let { MovieDetail(movie = it) }
+    }
 }
 
 @Composable

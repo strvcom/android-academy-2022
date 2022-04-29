@@ -19,6 +19,6 @@ class MovieDetailViewModel @Inject constructor(
             "Movie id is missing..."
         }
 
-    private val _movie = MutableStateFlow(OfflineMoviesProvider.getMovieDetail(movieId))
-    val movie = _movie.asStateFlow()
+    private val _viewState = MutableStateFlow(MovieDetailViewState(loading = true))
+    val viewState = _viewState.asStateFlow()
 }
