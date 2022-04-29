@@ -23,7 +23,9 @@ import androidx.compose.ui.unit.dp
 import com.strv.movies.data.OfflineMoviesProvider
 import com.strv.movies.ui.movieslist.MoviesList
 import com.strv.movies.ui.theme.MoviesTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
