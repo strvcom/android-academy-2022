@@ -6,4 +6,5 @@ data class MovieDetailViewState(
     val movie: MovieDetail? = null,
     val loading: Boolean = false,
     val error: String? = null,
+    val videoProgress: Float = 0f
 )

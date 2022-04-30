@@ -10,9 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -45,14 +43,23 @@ fun MovieDetailScreen(
     } else if (viewState.error != null) {
         ErrorScreen(errorMessage = viewState.error!!)
     } else {
-        viewState.movie?.let { MovieDetail(movie = it) }
+        viewState.movie?.let {
+            MovieDetail(
+                movie = it,
+                videoProgress = viewState.videoProgress,
+                setVideoProgress = viewModel::updateVideoProgress
+            )
+        }
     }
 }
 
 @Composable
-fun MovieDetail(movie: MovieDetail) {
+fun MovieDetail(
+    movie: MovieDetail,
+    videoProgress: Float = 0f,
+    setVideoProgress: (second: Float) -> Unit
+) {
     Column {
-        val (videoProgress, setVideoProgress) = rememberSaveable { mutableStateOf(0f) }
         Log.d("TAG", "MovieDetail: $videoProgress")
 
         MovieTrailerPlayer(
