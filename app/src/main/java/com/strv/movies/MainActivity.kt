@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val isSystemInDarkTheme = isSystemInDarkTheme()
-            val isDarkTheme = remember { mutableStateOf(isSystemInDarkTheme) }
+            val isDarkTheme = rememberSaveable { mutableStateOf(isSystemInDarkTheme) }
             MoviesTheme(useDarkTheme = isDarkTheme.value) {
                 // A surface container using the 'background' color from the theme
                 Surface(
