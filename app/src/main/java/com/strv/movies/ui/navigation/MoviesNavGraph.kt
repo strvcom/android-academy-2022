@@ -8,9 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.strv.movies.data.OfflineMoviesProvider
-import com.strv.movies.ui.movieslist.MoviesList
 import com.strv.movies.ui.moviedetail.MovieDetailScreen
+import com.strv.movies.ui.movieslist.MoviesListScreen
 
 @Composable
 fun MoviesNavGraph(
@@ -21,11 +20,11 @@ fun MoviesNavGraph(
         startDestination = MoviesDestinations.MOVIES_LIST_ROUTE
     ) {
         composable(MoviesDestinations.MOVIES_LIST_ROUTE) {
-            MoviesList(
-                movies = OfflineMoviesProvider.getMovies(),
-                onMovieClick = { movieId ->
+            MoviesListScreen(
+                navigateToMovieDetail = { movieId ->
                     navController.navigate("${MoviesDestinations.MOVIE_DETAIL_ROUTE}/$movieId")
-                }
+                },
+                viewModel = hiltViewModel()
             )
         }
 
