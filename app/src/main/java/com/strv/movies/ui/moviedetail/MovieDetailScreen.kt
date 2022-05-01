@@ -42,8 +42,8 @@ fun MovieDetail(movie: MovieDetail) {
         )
 
         Row {
-            MoviePoster(movie = movie)
             MovieInfo(movie = movie)
+            MoviePoster(movie = movie)
         }
     }
 }
@@ -110,14 +110,21 @@ fun MovieInfo(movie: MovieDetail) {
     Column {
         Text(
             movie.title,
-            modifier = Modifier.padding(top = 16.dp, end = 16.dp),
+            modifier = Modifier
+                .padding(start = 10.dp, top = 16.dp, end = 10.dp),
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp
         )
-        Text(movie.releaseDate, modifier = Modifier.padding(top = 8.dp))
+        Text(
+            movie.releaseDate,
+            modifier = Modifier
+                .padding(start = 10.dp, top = 8.dp)
+        )
         Text(
             movie.overview,
-            modifier = Modifier.padding(top = 8.dp, end = 16.dp),
+            modifier = Modifier
+                .padding(start = 10.dp, top = 8.dp, end = 10.dp)
+                .size(240.dp),
             textAlign = TextAlign.Justify,
             color = Color.Green
         )
