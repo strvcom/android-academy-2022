@@ -12,7 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -82,13 +84,25 @@ fun MovieTrailerPlayer(videoId: String, progressSeconds: MutableState<Float>) {
 
 @Composable
 fun MoviePoster(movie: MovieDetail) {
-    AsyncImage(
-        model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
-        contentDescription = stringResource(id = R.string.movie_image),
-        modifier = Modifier
-            .padding(top = 16.dp)
-            .size(120.dp)
-    )
+    Column {
+
+        AsyncImage(
+            model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
+            contentDescription = stringResource(id = R.string.movie_image),
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .size(120.dp),
+        )
+        Row {
+            Text(
+                movie.title,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                fontSize = 10.sp,
+                color = Color.Red
+            )
+        }
+    }
 }
 
 @Composable
@@ -104,7 +118,8 @@ fun MovieInfo(movie: MovieDetail) {
         Text(
             movie.overview,
             modifier = Modifier.padding(top = 8.dp, end = 16.dp),
-            textAlign = TextAlign.Justify
+            textAlign = TextAlign.Justify,
+            color = Color.Green
         )
     }
 }
