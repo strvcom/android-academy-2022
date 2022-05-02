@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -21,6 +22,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -93,15 +95,14 @@ fun MoviePoster(movie: MovieDetail) {
                 .padding(top = 16.dp)
                 .size(120.dp),
         )
-        Row {
-            Text(
-                movie.title,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                fontSize = 10.sp,
-                color = Color.Red
-            )
-        }
+        Text(
+            movie.title,
+            style = MaterialTheme.typography.subtitle2,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis, // It will add "..." to the end
+            textAlign = TextAlign.Center,
+            color = Color.Red
+        )
     }
 }
 
@@ -111,19 +112,21 @@ fun MovieInfo(movie: MovieDetail) {
         Text(
             movie.title,
             modifier = Modifier
-                .padding(start = 10.dp, top = 16.dp, end = 10.dp),
+                .padding(start = 8.dp, top = 16.dp, end = 8.dp),
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp
         )
         Text(
             movie.releaseDate,
             modifier = Modifier
-                .padding(start = 10.dp, top = 8.dp)
+                .padding(start = 8.dp, top = 8.dp)
         )
         Text(
             movie.overview,
+            maxLines = 5,
+            overflow = TextOverflow.Ellipsis, // It will add "..." to the end
             modifier = Modifier
-                .padding(start = 10.dp, top = 8.dp, end = 10.dp)
+                .padding(start = 8.dp, top = 8.dp, end = 8.dp)
                 .size(240.dp),
             textAlign = TextAlign.Justify,
             color = Color.Green
