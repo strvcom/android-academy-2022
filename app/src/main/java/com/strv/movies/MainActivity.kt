@@ -9,30 +9,44 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.strv.movies.data.OfflineMoviesProvider
-import com.strv.movies.ui.movieslist.MoviesList
+import com.strv.movies.extension.assistedViewModel
+import com.strv.movies.ui.navigation.MoviesNavGraph
 import com.strv.movies.ui.theme.MoviesTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var mainViewModelFactory: MainViewModel.MainViewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val isSystemInDarkTheme = isSystemInDarkTheme()
-            val isDarkTheme = remember { mutableStateOf(isSystemInDarkTheme) }
-            MoviesTheme(useDarkTheme = isDarkTheme.value) {
+            val viewModel by assistedViewModel {
+                mainViewModelFactory.create(it, isSystemInDarkTheme())
+            }
+
+            val isDarkTheme by viewModel.isDarkTheme.collectAsState()
+            changeStatusBarColor(isDarkTheme)
+
+            MoviesTheme(useDarkTheme = isDarkTheme) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -45,10 +59,13 @@ class MainActivity : ComponentActivity() {
                             },
                             backgroundColor = MaterialTheme.colors.primary,
                             actions = {
-                                DarkLightModeSwitchIcon(isDarkTheme = isDarkTheme)
+                                DarkLightModeSwitchIcon(
+                                    isDarkTheme = isDarkTheme,
+                                    changeTheme = viewModel::changeTheme
+                                )
                             }
                         )
-                        MoviesList(movies = OfflineMoviesProvider.getMovies())
+                        MoviesNavGraph()
                     }
                 }
             }
@@ -56,7 +73,10 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun DarkLightModeSwitchIcon(isDarkTheme: MutableState<Boolean>) {
+    private fun DarkLightModeSwitchIcon(
+        isDarkTheme: Boolean,
+        changeTheme: (isDarkTheme: Boolean) -> Unit
+    ) {
         Icon(
             modifier = Modifier
                 .padding(end = 12.dp)
@@ -66,11 +86,10 @@ class MainActivity : ComponentActivity() {
                     },
                     indication = rememberRipple(bounded = false),
                 ) {
-                    isDarkTheme.value = !isDarkTheme.value
-                    changeStatusBarColor(isDarkTheme.value)
+                    changeTheme(!isDarkTheme)
                 },
             painter = painterResource(
-                id = if (isDarkTheme.value) {
+                id = if (isDarkTheme) {
                     R.drawable.ic_light
                 } else {
                     R.drawable.ic_dark

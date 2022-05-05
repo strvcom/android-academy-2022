@@ -7,20 +7,45 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.strv.movies.R
 import com.strv.movies.model.Movie
+import com.strv.movies.ui.error.ErrorScreen
+import com.strv.movies.ui.loading.LoadingScreen
+
+@Composable
+fun MoviesListScreen(
+    navigateToMovieDetail: (movieId: Int) -> Unit,
+    viewModel: MoviesListViewModel = viewModel()
+) {
+    val viewState by viewModel.viewState.collectAsState()
+
+    if (viewState.loading) {
+        LoadingScreen()
+    } else if (viewState.error != null) {
+        ErrorScreen(errorMessage = viewState.error!!)
+    } else {
+        MoviesList(
+            movies = viewState.movies,
+            onMovieClick = navigateToMovieDetail
+        )
+    }
+}
 
 @Composable
 fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
@@ -37,7 +62,10 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
-fun MoviesList(movies: List<Movie>) {
+fun MoviesList(
+    movies: List<Movie>,
+    onMovieClick: (movieId: Int) -> Unit,
+) {
     LazyVerticalGrid(
         modifier = Modifier.padding(8.dp),
         cells = GridCells.Fixed(2)
@@ -55,7 +83,9 @@ fun MoviesList(movies: List<Movie>) {
             ) {
                 MovieItem(
                     movie = movie,
-                    modifier = Modifier.animateItemPlacement()
+                    modifier = Modifier
+                        .animateItemPlacement()
+                        .clickable { onMovieClick(movie.id) }
                 )
             }
         }
