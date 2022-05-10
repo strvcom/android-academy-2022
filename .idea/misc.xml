@@ -5,6 +5,9 @@
       <map>
         <entry key="../../../../../layout/compose-model-1646385544323.xml" value="0.20938628158844766" />
         <entry key="../../../../../layout/compose-model-1646820810187.xml" value="0.2" />
+        <entry key="app/src/main/res/drawable/ic_email.xml" value="0.2365" />
+        <entry key="app/src/main/res/drawable/ic_login_facebook.xml" value="0.2365" />
+        <entry key="app/src/main/res/drawable/ic_login_logo.xml" value="0.2045" />
       </map>
     </option>
   </component>

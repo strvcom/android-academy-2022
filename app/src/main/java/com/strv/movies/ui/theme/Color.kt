@@ -23,3 +23,5 @@ val md_theme_dark_background = Color(0xFF1C1B1F)
 val md_theme_dark_onBackground = Color(0xFFE6E1E5)
 val md_theme_dark_surface = Color(0xFF1C1B1F)
 val md_theme_dark_onSurface = Color(0xFFE6E1E5)
+
+val login_facebookLogo = Color(0xFF039BE5)
