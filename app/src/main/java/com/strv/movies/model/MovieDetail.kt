@@ -13,7 +13,11 @@ data class MovieDetailDTO(
     @Json(name = "release_date")
     val releaseDate: String,
     @Json(name = "poster_path")
-    val posterPath: String
+    val posterPath: String,
+    @Json(name = "revenue")
+    val revenue: Int,
+    @Json(name = "runtime")
+    val runtime: Int
 )
 
 // Used for UI
@@ -22,5 +26,6 @@ data class MovieDetail(
     val title: String,
     val overview: String?,
     val releaseYear: String,
-    val posterPath: String
+    val posterPath: String,
+    val runtime: Int // Not used for now - try to include it in UI if you want :)
 )
