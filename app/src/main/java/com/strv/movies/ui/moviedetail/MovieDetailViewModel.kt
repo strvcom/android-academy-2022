@@ -16,7 +16,7 @@ import kotlin.random.Random
 
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val movieId =
