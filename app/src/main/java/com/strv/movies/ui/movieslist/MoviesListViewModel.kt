@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,15 +20,15 @@ class MoviesListViewModel @Inject constructor(
     val viewState = _viewState.asStateFlow()
 
     init {
-        //viewModelScope.launch {
-        // TODO Change your emulator cellular to 3G with poor signal
-        runBlocking {
+        viewModelScope.launch {
+            // TODO Change your emulator cellular to 3G with poor signal
             fetchPopularMovies()
+            fetchMovieDetail()
         }
-        //}
     }
 
     private suspend fun fetchPopularMovies() {
+        Log.e("TAG", "MovieList - Start fetching data.")
         movieRepository.getPopularMovies().fold(
             { error ->
                 Log.d("TAG", "MovieListLoadingError: $error")
@@ -40,12 +39,25 @@ class MoviesListViewModel @Inject constructor(
                 }
             },
             { movieList ->
-                Log.d("TAG", "MovieListSuccess: ${movieList.size}")
+                Log.e("TAG", "MovieListSuccess: ${movieList.size}")
                 _viewState.update {
                     MoviesListViewState(
                         movies = movieList
                     )
                 }
+            }
+        )
+    }
+
+    // Spider-Man movie detail
+    private suspend fun fetchMovieDetail() {
+        Log.e("TAG", "MovieDetail - Start fetching data.")
+        movieRepository.getMovieDetail(634649).fold(
+            { error ->
+                Log.d("TAG", "MovieDetailLoadingError: $error")
+            },
+            { movie ->
+                Log.e("TAG", "MovieDetailSuccess: ${movie.title}")
             }
         )
     }
