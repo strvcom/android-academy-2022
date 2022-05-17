@@ -4,6 +4,6 @@
     <string name="login_username_text_input_field">Username</string>
     <string name="login_password_text_input_field">Password</string>
     <string name="login_btn">Log In with a smile (｡◕‿◕｡)</string>
-    <string name="continue_with_fb">Conitnue with Facebook</string>
+    <string name="continue_with_fb">Continue with Facebook</string>
     <string name="continue_with_gmail">Sign In with Gmail</string>
 </resources>
