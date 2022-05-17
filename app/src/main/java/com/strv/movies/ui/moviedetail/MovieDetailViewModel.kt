@@ -30,21 +30,24 @@ class MovieDetailViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            movieRepository.getMovieDetail(movieId).fold({ error ->
-                Log.d("TAG", "MovieDetailLoadingError: $error")
-                _viewState.update {
-                    MovieDetailViewState(
-                        error = error
-                    )
+            movieRepository.getMovieDetail(movieId).fold(
+                { error ->
+                    Log.d("TAG", "MovieDetailLoadingError: $error")
+                    _viewState.update {
+                        MovieDetailViewState(
+                            error = error
+                        )
+                    }
+                },
+                { movie ->
+                    Log.d("TAG", "MovieDetailSuccess: ${movie.title}")
+                    _viewState.update {
+                        MovieDetailViewState(
+                            movie = movie
+                        )
+                    }
                 }
-            }, { movie ->
-                Log.d("TAG", "MovieDetailSuccess: ${movie.title}")
-                _viewState.update {
-                    MovieDetailViewState(
-                        movie = movie
-                    )
-                }
-            })
+            )
         }
     }
 
