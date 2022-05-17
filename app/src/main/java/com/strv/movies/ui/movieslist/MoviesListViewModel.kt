@@ -23,7 +23,7 @@ class MoviesListViewModel @Inject constructor(): ViewModel() {
             delay(2000)
             _viewState.update {
                 val randomNumber = Random.nextInt(10)
-                if (randomNumber < 3) {
+                if (randomNumber < 1) {
                     MoviesListViewState(error = "Something went wrong!")
                 } else {
                     MoviesListViewState(

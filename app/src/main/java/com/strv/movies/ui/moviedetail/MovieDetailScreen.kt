@@ -28,7 +28,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.strv.movies.R
 import com.strv.movies.data.OfflineMoviesProvider
-import com.strv.movies.model.MovieDetailEntity
+import com.strv.movies.model.MovieDetail
 import com.strv.movies.ui.error.ErrorScreen
 import com.strv.movies.ui.loading.LoadingScreen
 
@@ -55,7 +55,7 @@ fun MovieDetailScreen(
 
 @Composable
 fun MovieDetail(
-    movie: MovieDetailEntity,
+    movie: MovieDetail,
     videoProgress: Float = 0f,
     setVideoProgress: (second: Float) -> Unit
 ) {
@@ -114,7 +114,7 @@ fun MovieTrailerPlayer(
 }
 
 @Composable
-fun MoviePoster(movie: MovieDetailEntity) {
+fun MoviePoster(movie: MovieDetail) {
     AsyncImage(
         model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
         contentDescription = stringResource(id = R.string.movie_image),
@@ -125,7 +125,7 @@ fun MoviePoster(movie: MovieDetailEntity) {
 }
 
 @Composable
-fun MovieInfo(movie: MovieDetailEntity) {
+fun MovieInfo(movie: MovieDetail) {
     Column {
         Text(
             movie.title,
@@ -133,7 +133,7 @@ fun MovieInfo(movie: MovieDetailEntity) {
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp
         )
-        Text(movie.releaseDate, modifier = Modifier.padding(top = 8.dp))
+        Text(movie.releaseYear, modifier = Modifier.padding(top = 8.dp))
         movie.overview?.let {
             overview ->
             Text(

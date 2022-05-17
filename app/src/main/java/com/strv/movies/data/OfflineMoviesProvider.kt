@@ -1,7 +1,6 @@
 package com.strv.movies.data
 
 import com.strv.movies.model.*
-import com.strv.movies.model.Collection
 
 object OfflineMoviesProvider {
     fun getMovies(): List<Movie> {
@@ -328,54 +327,6 @@ object OfflineMoviesProvider {
             )
         )
     }
-
-    fun getMovieDetail(movieId: Int): MovieDetail {
-        return MovieDetail(
-            634649,
-            false,
-            "/iQFcwSGbZXMkeyKrxbPnwnRo5fl.jpg",
-            Collection(
-                531241,
-                "Spider-Man (Avengers) Collection",
-                "",
-                "/nogV4th2P5QWYvQIMiWHj4CFLU9.jpg", "/AvnqpRwlEaYNVL6wzC4RN94EdSd.jpg"
-            ),
-            200000000,
-            listOf(Genre(28, "Action"), Genre(12, "Adventure"), Genre(878, "Science Fiction")),
-            "https://www.spidermannowayhome.movie",
-            "tt10872600",
-            "en",
-            "Spider-Man: No Way Home",
-            "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero. When he asks for help from Doctor Strange the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.",
-            13287.383,
-            "/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
-            listOf(
-                ProductionCompany(
-                    420,
-                    "/hUzeosd33nzE5MCNsZxCGEKTXaQ.png",
-                    "Marvel Studios",
-                    "US"
-                ),
-                ProductionCompany(
-                    84041,
-                    "/nw4kyc29QRpNtFbdsBHkRSFavvt.png",
-                    "Pascal Pictures",
-                    "US"
-                ),
-                ProductionCompany(5, "/71BqEFAF4V3qjjMPCpLuyJFB9A.png", "Columbia Pictures", "US")
-            ),
-            listOf(
-                ProductionCountry("US", "United States of America")
-            ),
-            "2021-12-15", 1876685954, 148,
-            listOf(
-                SpokenLanguage("en", "English"),
-                SpokenLanguage("tl", "Tagalog")
-            ),
-            "Released", "The Multiverse unleashed.", "Spider-Man: No Way Home", false, 8.3, 9615
-        )
-    }
-
 
     fun getTrailer(movieId: Int): Trailer {
         return Trailer(
