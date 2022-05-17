@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.strv.movies.extension.fold
 import com.strv.movies.network.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -22,11 +21,7 @@ class MoviesListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            // TODO Change your emulator cellular to 3G with poor signal
-            val popularListDeferred = async { fetchPopularMovies() }
-            val movieDetailDeferred = async { fetchMovieDetail() }
-            popularListDeferred.await()
-            movieDetailDeferred.await()
+            fetchPopularMovies()
         }
     }
 
@@ -48,19 +43,6 @@ class MoviesListViewModel @Inject constructor(
                         movies = movieList
                     )
                 }
-            }
-        )
-    }
-
-    // Spider-Man movie detail
-    private suspend fun fetchMovieDetail() {
-        Log.e("TAG", "MovieDetail - Start fetching data.")
-        movieRepository.getMovieDetail(634649).fold(
-            { error ->
-                Log.d("TAG", "MovieDetailLoadingError: $error")
-            },
-            { movie ->
-                Log.e("TAG", "MovieDetailSuccess: ${movie.title}")
             }
         )
     }
