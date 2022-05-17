@@ -1,16 +1,21 @@
 package com.strv.movies.ui.login
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.strv.movies.R
@@ -64,13 +69,31 @@ private fun LoginInWithSmileButton(navigateToMovieList: () -> Unit) {
 @Composable
 private fun PasswordField() {
     val passwordState = remember { mutableStateOf(TextFieldValue()) }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+
     TextField(
         value = passwordState.value,
         onValueChange = { passwordState.value = it },
         modifier = Modifier.padding(bottom = 10.dp),
         isError = false,
+        placeholder = { Text("Password") },
         label = {
             Text(text = stringResource(id = R.string.login_password_text_input_field))
+        },
+
+        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        trailingIcon = {
+            val image = if (passwordVisible)
+                Icons.Filled.Visibility
+            else Icons.Filled.VisibilityOff
+
+            // Please provide localized description for accessibility services
+            val description = if (passwordVisible) "Hide password" else "Show password"
+
+            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                Icon(imageVector = image, description)
+            }
         }
     )
 }
