@@ -21,21 +21,24 @@ class MoviesListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            movieRepository.getPopularMovies().fold({ error ->
-                Log.d("TAG", "MovieListLoadingError: $error")
-                _viewState.update {
-                    MoviesListViewState(
-                        error = error
-                    )
+            movieRepository.getPopularMovies().fold(
+                { error ->
+                    Log.d("TAG", "MovieListLoadingError: $error")
+                    _viewState.update {
+                        MoviesListViewState(
+                            error = error
+                        )
+                    }
+                },
+                { movieList ->
+                    Log.d("TAG", "MovieListSuccess: ${movieList.size}")
+                    _viewState.update {
+                        MoviesListViewState(
+                            movies = movieList
+                        )
+                    }
                 }
-            }, { movieList ->
-                Log.d("TAG", "MovieListSuccess: ${movieList.size}")
-                _viewState.update {
-                    MoviesListViewState(
-                        movies = movieList
-                    )
-                }
-            })
+            )
         }
     }
 }
