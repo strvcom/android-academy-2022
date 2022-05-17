@@ -1,22 +1,23 @@
 package com.strv.movies.ui.moviedetail
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.strv.movies.data.OfflineMoviesProvider
+import com.strv.movies.extension.fold
+import com.strv.movies.network.MovieRepository
 import com.strv.movies.ui.navigation.MoviesNavArguments
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    movieRepository: MovieRepository
 ) : ViewModel() {
 
     private val movieId =
@@ -29,17 +30,21 @@ class MovieDetailViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            delay(2000)
-            _viewState.update {
-                val randomNumber = Random.nextInt(10)
-                if (randomNumber < 3) {
-                    MovieDetailViewState(error = "Something went wrong!")
-                } else {
+            movieRepository.getMovieDetail(movieId).fold({ error ->
+                Log.d("TAG", "MovieDetailLoadingError: $error")
+                _viewState.update {
                     MovieDetailViewState(
-                        movie = OfflineMoviesProvider.getMovieDetail(movieId)
+                        error = error
                     )
                 }
-            }
+            }, { movie ->
+                Log.d("TAG", "MovieDetailSuccess: ${movie.title}")
+                _viewState.update {
+                    MovieDetailViewState(
+                        movie = movie
+                    )
+                }
+            })
         }
     }
 
