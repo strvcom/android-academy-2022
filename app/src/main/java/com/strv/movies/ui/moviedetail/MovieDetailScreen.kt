@@ -133,11 +133,14 @@ fun MovieInfo(movie: MovieDetail) {
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp
         )
-        Text(movie.releaseDate, modifier = Modifier.padding(top = 8.dp))
-        Text(
-            movie.overview,
-            modifier = Modifier.padding(top = 8.dp, end = 16.dp),
-            textAlign = TextAlign.Justify
-        )
+        Text(movie.releaseYear, modifier = Modifier.padding(top = 8.dp))
+        movie.overview?.let {
+            overview ->
+            Text(
+                overview,
+                modifier = Modifier.padding(top = 8.dp, end = 16.dp),
+                textAlign = TextAlign.Justify
+            )
+        }
     }
 }
