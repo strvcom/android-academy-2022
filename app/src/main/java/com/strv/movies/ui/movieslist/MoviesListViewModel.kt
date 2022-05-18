@@ -14,31 +14,36 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MoviesListViewModel @Inject constructor(
-    movieRepository: MovieRepository
+    private val movieRepository: MovieRepository
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(MoviesListViewState(loading = true))
     val viewState = _viewState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            movieRepository.getPopularMovies().fold(
-                { error ->
-                    Log.d("TAG", "MovieListLoadingError: $error")
-                    _viewState.update {
-                        MoviesListViewState(
-                            error = error
-                        )
-                    }
-                },
-                { movieList ->
-                    Log.d("TAG", "MovieListSuccess: ${movieList.size}")
-                    _viewState.update {
-                        MoviesListViewState(
-                            movies = movieList
-                        )
-                    }
-                }
-            )
+            fetchPopularMovies()
         }
+    }
+
+    private suspend fun fetchPopularMovies() {
+        Log.e("TAG", "MovieList - Start fetching data.")
+        movieRepository.getPopularMovies().fold(
+            { error ->
+                Log.d("TAG", "MovieListLoadingError: $error")
+                _viewState.update {
+                    MoviesListViewState(
+                        error = error
+                    )
+                }
+            },
+            { movieList ->
+                Log.e("TAG", "MovieListSuccess: ${movieList.size}")
+                _viewState.update {
+                    MoviesListViewState(
+                        movies = movieList
+                    )
+                }
+            }
+        )
     }
 }
