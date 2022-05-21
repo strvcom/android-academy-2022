@@ -40,10 +40,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val viewModel by assistedViewModel {
-                mainViewModelFactory.create(it, isSystemInDarkTheme())
+                mainViewModelFactory.create(it)
             }
 
-            val isDarkTheme by viewModel.isDarkTheme.collectAsState()
+            val isDarkTheme by viewModel.isDarkTheme.collectAsState(isSystemInDarkTheme())
             changeStatusBarColor(isDarkTheme)
 
             MoviesTheme(useDarkTheme = isDarkTheme) {

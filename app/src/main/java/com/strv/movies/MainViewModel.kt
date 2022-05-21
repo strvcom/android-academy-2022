@@ -2,28 +2,28 @@ package com.strv.movies
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.strv.movies.data.database.MoviesDataStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class MainViewModel @AssistedInject constructor(
-    @Assisted savedStateHandle: SavedStateHandle,
-    @Assisted isDarkTheme: Boolean,
-): ViewModel() {
+    private val moviesDataStore: MoviesDataStore,
+    @Assisted savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     @AssistedFactory
     interface MainViewModelFactory {
-        fun create(handle: SavedStateHandle, isDarkTheme: Boolean): MainViewModel
+        fun create(handle: SavedStateHandle): MainViewModel
     }
 
-    private var _isDarkTheme = MutableStateFlow(isDarkTheme)
-    val isDarkTheme = _isDarkTheme.asStateFlow()
+    val isDarkTheme = moviesDataStore.darkModeFlow
 
     fun changeTheme(isDarkTheme: Boolean) {
-        _isDarkTheme.update { isDarkTheme }
+        viewModelScope.launch {
+            moviesDataStore.setDarkTheme(isDarkTheme)
+        }
     }
 }
