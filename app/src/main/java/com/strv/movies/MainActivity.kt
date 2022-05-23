@@ -3,6 +3,7 @@ package com.strv.movies
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -24,24 +25,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.strv.movies.extension.assistedViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.strv.movies.ui.navigation.MoviesNavGraph
 import com.strv.movies.ui.theme.MoviesTheme
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var mainViewModelFactory: MainViewModel.MainViewModelFactory
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel by assistedViewModel {
-                mainViewModelFactory.create(it)
-            }
+            val viewModel = viewModel<MainViewModel>()
 
             val isDarkTheme by viewModel.isDarkTheme.collectAsState(isSystemInDarkTheme())
             changeStatusBarColor(isDarkTheme)
