@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -28,6 +30,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.strv.movies.R
 import com.strv.movies.data.OfflineMoviesProvider
+import com.strv.movies.model.Genre
 import com.strv.movies.model.MovieDetail
 import com.strv.movies.ui.error.ErrorScreen
 import com.strv.movies.ui.loading.LoadingScreen
@@ -72,6 +75,8 @@ fun MovieDetail(
             MoviePoster(movie = movie)
             MovieInfo(movie = movie)
         }
+
+        GenresList(genres = movie.genres)
     }
 }
 
@@ -139,6 +144,18 @@ fun MovieInfo(movie: MovieDetail) {
                 overview,
                 modifier = Modifier.padding(top = 8.dp, end = 16.dp),
                 textAlign = TextAlign.Justify
+            )
+        }
+    }
+}
+
+@Composable
+fun GenresList(genres: List<Genre>) {
+    LazyRow {
+        itemsIndexed(items = genres) { _, item ->
+            Text(
+                text = item.name,
+                modifier = Modifier.padding(16.dp)
             )
         }
     }
