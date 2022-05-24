@@ -58,10 +58,6 @@ class MovieDetailViewModel @Inject constructor(
     private fun observeMovieDetail() {
         viewModelScope.launch {
             movieRepository.observeMovieDetail(movieId).collect { detail ->
-                Log.d("TAG", "observeMovieDetail: ${detail?.title}")
-                detail?.genres?.forEach {
-                    Log.d("TAG", "genre: ${it.name}")
-                }
                 _movieDetail.value = detail
             }
         }
