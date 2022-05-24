@@ -17,7 +17,9 @@ data class MovieDetailDTO(
     @Json(name = "revenue")
     val revenue: Int,
     @Json(name = "runtime")
-    val runtime: Int
+    val runtime: Int,
+    @Json(name = "genres")
+    val genres: List<GenreDTO>
 )
 
 // Used for UI
