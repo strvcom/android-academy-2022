@@ -1,6 +1,9 @@
 package com.strv.movies.data.mapper
 
+import com.strv.movies.data.entity.GenreEntity
 import com.strv.movies.data.entity.MovieDetailEntity
+import com.strv.movies.data.entity.MovieGenreEntity
+import com.strv.movies.model.GenreDTO
 import com.strv.movies.model.MovieDetail
 import com.strv.movies.model.MovieDetailDTO
 import javax.inject.Inject
@@ -35,4 +38,14 @@ fun MovieDetailEntity.toDomain() = MovieDetail(
     releaseYear = releaseDate,
     posterPath = posterPath,
     runtime = runtime
+)
+
+fun GenreDTO.toEntity() = GenreEntity(
+    genreId = id,
+    name = name
+)
+
+fun GenreDTO.toEntity(movieId: Int) = MovieGenreEntity(
+    genreId = id,
+    movieId = movieId
 )

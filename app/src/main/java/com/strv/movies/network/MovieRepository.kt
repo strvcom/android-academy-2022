@@ -20,11 +20,14 @@ class MovieRepository @Inject constructor(
     private val movieDetailMapper: MovieDetailMapper,
     private val movieMapper: MovieMapper
 ) {
+
     suspend fun getMovieDetail(movieId: Int): Either<String, MovieDetail> {
         return try {
             val movie = api.getMovieDetail(movieId)
 
             moviesDao.insertMovieDetail(movie.toEntity())
+            moviesDao.insertGenres(movie.genres.map { it.toEntity() })
+            moviesDao.insertMovieGenres(movie.genres.map { it.toEntity(movie.id) })
 
             Either.Value(movieDetailMapper.map(movie))
         } catch (exception: Throwable) {
