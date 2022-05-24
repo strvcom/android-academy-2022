@@ -36,7 +36,7 @@ import com.strv.movies.ui.loading.LoadingScreen
 fun MovieDetailScreen(
     viewModel: MovieDetailViewModel = viewModel()
 ) {
-    val viewState by viewModel.viewState.collectAsState()
+    val viewState by viewModel.viewState.collectAsState(MovieDetailViewState(loading = true))
 
     if (viewState.loading) {
         LoadingScreen()
@@ -134,8 +134,7 @@ fun MovieInfo(movie: MovieDetail) {
             fontSize = 20.sp
         )
         Text(movie.releaseYear, modifier = Modifier.padding(top = 8.dp))
-        movie.overview?.let {
-            overview ->
+        movie.overview?.let { overview ->
             Text(
                 overview,
                 modifier = Modifier.padding(top = 8.dp, end = 16.dp),

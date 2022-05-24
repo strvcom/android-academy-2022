@@ -27,3 +27,12 @@ fun MovieDetailDTO.toEntity() = MovieDetailEntity(
     runtime = runtime,
     revenue = revenue
 )
+
+fun MovieDetailEntity.toDomain() = MovieDetail(
+    id = id,
+    title = title,
+    overview = overview,
+    releaseYear = releaseDate,
+    posterPath = posterPath,
+    runtime = runtime
+)

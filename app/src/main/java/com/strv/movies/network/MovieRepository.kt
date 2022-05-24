@@ -3,10 +3,13 @@ package com.strv.movies.network
 import com.strv.movies.data.dao.MoviesDao
 import com.strv.movies.data.mapper.MovieDetailMapper
 import com.strv.movies.data.mapper.MovieMapper
+import com.strv.movies.data.mapper.toDomain
 import com.strv.movies.data.mapper.toEntity
 import com.strv.movies.extension.Either
 import com.strv.movies.model.Movie
 import com.strv.movies.model.MovieDetail
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -37,4 +40,9 @@ class MovieRepository @Inject constructor(
             Either.Error(exception.localizedMessage ?: "Network error")
         }
     }
+
+    fun observeMovieDetail(movieId: Int): Flow<MovieDetail?> =
+        moviesDao.observeMovieDetail(movieId).map {
+            it?.toDomain()
+        }
 }
