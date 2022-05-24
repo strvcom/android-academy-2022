@@ -1,5 +1,6 @@
 package com.strv.movies.data.mapper
 
+import com.strv.movies.data.entity.MovieDetailEntity
 import com.strv.movies.model.MovieDetail
 import com.strv.movies.model.MovieDetailDTO
 import javax.inject.Inject
@@ -16,3 +17,13 @@ class MovieDetailMapper @Inject constructor() : Mapper<MovieDetailDTO, MovieDeta
             runtime = from.runtime // It would be nice to use string resource here and return formatted string value, sadly we do not have context here.
         )
 }
+
+fun MovieDetailDTO.toEntity() = MovieDetailEntity(
+    id = id,
+    title = title,
+    overview = overview,
+    releaseDate = releaseDate,
+    posterPath = posterPath,
+    runtime = runtime,
+    revenue = revenue
+)
