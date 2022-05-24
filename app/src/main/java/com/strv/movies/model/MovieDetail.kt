@@ -29,5 +29,6 @@ data class MovieDetail(
     val overview: String?,
     val releaseYear: String,
     val posterPath: String,
-    val runtime: Int // Not used for now - try to include it in UI if you want :)
+    val runtime: Int, // Not used for now - try to include it in UI if you want :)
+    val genres: List<Genre>
 )

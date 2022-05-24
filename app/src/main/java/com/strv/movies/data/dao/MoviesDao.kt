@@ -7,6 +7,7 @@ import androidx.room.Query
 import com.strv.movies.data.entity.GenreEntity
 import com.strv.movies.data.entity.MovieDetailEntity
 import com.strv.movies.data.entity.MovieGenreEntity
+import com.strv.movies.data.entity.MovieDetailWithGenres
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,7 +17,7 @@ interface MoviesDao {
     suspend fun insertMovieDetail(entity: MovieDetailEntity)
 
     @Query("SELECT * FROM movie_detail WHERE movie_id = :id")
-    fun observeMovieDetail(id: Int): Flow<MovieDetailEntity?>
+    fun observeMovieDetail(id: Int): Flow<MovieDetailWithGenres?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGenres(enities: List<GenreEntity>)
