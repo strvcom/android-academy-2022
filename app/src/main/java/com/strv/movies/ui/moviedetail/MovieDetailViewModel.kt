@@ -39,7 +39,7 @@ class MovieDetailViewModel @Inject constructor(
         observeMovieDetail()
 
         viewModelScope.launch {
-            movieRepository.getMovieDetail(movieId).fold(
+            movieRepository.fetchMovieDetail(movieId).fold(
                 { error ->
                     Log.d("TAG", "MovieDetailLoadingError: $error")
                     _viewState.update {
@@ -48,8 +48,8 @@ class MovieDetailViewModel @Inject constructor(
                         )
                     }
                 },
-                { movie ->
-                    Log.d("TAG", "MovieDetailSuccess: ${movie.title}")
+                { movieTitle ->
+                    Log.d("TAG", "MovieDetailLoaded: $movieTitle")
                 }
             )
         }

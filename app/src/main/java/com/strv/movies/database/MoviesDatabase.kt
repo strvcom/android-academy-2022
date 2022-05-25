@@ -18,7 +18,7 @@ abstract class MoviesDatabase : RoomDatabase() {
 
     companion object {
         const val DATABASE_NAME = "movies_database"
-        const val DATABASE_VERSION = 3
+        const val DATABASE_VERSION = 1
     }
 
     abstract fun getMoviesDao(): MoviesDao
