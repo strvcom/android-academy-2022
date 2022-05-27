@@ -19,6 +19,8 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        // A valid key will need to be entered
+        buildConfigField("String", "API_KEY", API_KEY)
     }
 
     buildTypes {

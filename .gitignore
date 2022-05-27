@@ -10,3 +10,5 @@
 .cxx
 local.properties
 *.hprof
+/gradle.properties
+/app/gradle.properties

@@ -1,12 +1,9 @@
 package com.strv.movies.network
 
 import android.util.Log
-import androidx.compose.material.Text
-import androidx.compose.ui.res.stringResource
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.strv.movies.BuildConfig
-import com.strv.movies.R
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,11 +15,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileInputStream
-import java.io.InputStream
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -42,6 +34,7 @@ object NetworkModule {
     private const val REQUEST_TIMEOUT_SEC = 30L
     private const val MAX_PARALLEL_REQUESTS = 5
     private const val BASE_URL: String = "https://api.themoviedb.org/3/"
+
 
 
     @Provides
@@ -95,7 +88,7 @@ object NetworkModule {
         val originalHttpUrl = original.url
 
         val url = originalHttpUrl.newBuilder()
-            .addQueryParameter("api_key", "725b8af480d381b917131b58191acc14") // TODO ADD your key
+            .addQueryParameter("api_key", BuildConfig.API_KEY ) // TODO ADD your key
             .build()
 
         // Request customization: add request headers
