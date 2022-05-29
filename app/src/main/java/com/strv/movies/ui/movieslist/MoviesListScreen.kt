@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -67,7 +68,7 @@ fun MoviesList(
     onMovieClick: (movieId: Int) -> Unit,
 ) {
     LazyVerticalGrid(
-        modifier = Modifier.padding(8.dp),
+        contentPadding = PaddingValues(8.dp),
         cells = GridCells.Fixed(2)
     ) {
         items(movies) { movie ->
