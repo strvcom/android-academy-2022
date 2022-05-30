@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = viewModel(),
     onLogout: () -> Unit
 ) {
+    val avatarPath by viewModel.avatarPath.collectAsState(initial = null)
     var openDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val permissionState = rememberPermissionState(Manifest.permission.CAMERA)
@@ -60,7 +62,10 @@ fun ProfileScreen(
             }) {
             AvatarEditDialog(
                 onDismiss = { openDialog = false },
-                editAvatar = {},
+                editAvatar = {
+                    openDialog = false
+                    viewModel.onNewAvatar(it)
+                },
                 removeAvatar = {}
             )
         }
@@ -74,7 +79,7 @@ fun ProfileScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ProfileAvatar(
-            url = "https://www.looper.com/img/gallery/20-epic-movies-like-avatar-you-need-to-watch-next/l-intro-1645555067.jpg",
+            url = avatarPath,
             onEditClick = {
                 openDialog = true
             }
