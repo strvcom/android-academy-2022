@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.strv.movies.utils.rememberCameraLauncher
+import com.strv.movies.utils.rememberGalleryLauncher
 
 @Composable
 fun AvatarEditDialog(
@@ -25,6 +26,7 @@ fun AvatarEditDialog(
     removeEnabled: Boolean,
 ) {
     val cameraLauncher = rememberCameraLauncher(onResult = editAvatar)
+    val galleryLauncher = rememberGalleryLauncher(onResult = editAvatar)
 
     Dialog(onDismissRequest = onDismiss) {
         Box(
@@ -41,16 +43,14 @@ fun AvatarEditDialog(
             ) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        cameraLauncher.launch()
-                    }) {
+                    onClick = cameraLauncher::launch
+                ) {
                     Text(text = "CAMERA")
                 }
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        // TODO
-                    }) {
+                    onClick = galleryLauncher::launch
+                ) {
                     Text(text = "LIBRARY")
                 }
                 Button(
