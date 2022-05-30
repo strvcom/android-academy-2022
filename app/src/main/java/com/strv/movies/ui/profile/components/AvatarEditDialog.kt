@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.strv.movies.utils.rememberCameraLauncher
 
 @Composable
 fun AvatarEditDialog(
@@ -22,6 +23,8 @@ fun AvatarEditDialog(
     editAvatar: (String) -> Unit,
     removeAvatar: () -> Unit
 ) {
+    val cameraLauncher = rememberCameraLauncher(onResult = editAvatar)
+
     Dialog(onDismissRequest = onDismiss) {
         Box(
             modifier = Modifier
@@ -38,7 +41,7 @@ fun AvatarEditDialog(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        // TODO
+                        cameraLauncher.launch()
                     }) {
                     Text(text = "CAMERA")
                 }
