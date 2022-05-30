@@ -10,11 +10,13 @@ class MovieEntity(
     @PrimaryKey
     @ColumnInfo(name = "movie_id") val id: Int,
     @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "poster_path") val posterPath: String
+    @ColumnInfo(name = "poster_path") val posterPath: String,
+    @ColumnInfo(name = "rating") val rating: Int
 )
 
 fun MovieEntity.toDomain() = Movie(
     id = id,
     title = title,
-    posterPath = posterPath
+    posterPath = posterPath,
+    rating = rating
 )

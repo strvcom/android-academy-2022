@@ -4,7 +4,6 @@ import androidx.room.withTransaction
 import com.strv.movies.data.dao.MoviesDao
 import com.strv.movies.data.entity.MovieEntity
 import com.strv.movies.data.entity.toDomain
-import com.strv.movies.data.mapper.MovieMapper
 import com.strv.movies.database.MoviesDatabase
 import com.strv.movies.extension.Either
 import com.strv.movies.model.Movie
@@ -21,7 +20,6 @@ import javax.inject.Singleton
 class MovieRepository @Inject constructor(
     private val api: MovieApi,
     private val moviesDao: MoviesDao,
-    private val movieMapper: MovieMapper,
     private val moviesDatabase: MoviesDatabase
 ) {
 
@@ -35,13 +33,13 @@ class MovieRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchPopularMovies(): Either<String, List<Movie>> {
+    suspend fun fetchPopularMovies(): Either<String, Int> {
         return try {
             val popularMovies = api.getPopularMovies()
 
             moviesDao.insertPopularMovies(popularMovies.results.map(MovieDTO::toEntity))
 
-            Either.Value(popularMovies.results.map { movieMapper.map(it) })
+            Either.Value(popularMovies.results.size)
         } catch (exception: Throwable) {
             Either.Error(exception.localizedMessage ?: "Network error")
         }

@@ -46,13 +46,8 @@ class MoviesListViewModel @Inject constructor(
                     )
                 }
             },
-            { movieList ->
-                Log.e("TAG", "MovieListSuccess: ${movieList.size}")
-                _viewState.update {
-                    MoviesListViewState(
-                        movies = movieList
-                    )
-                }
+            { updatedMoviesCount ->
+                Log.e("TAG", "MovieListSuccess: $updatedMoviesCount")
             }
         )
     }

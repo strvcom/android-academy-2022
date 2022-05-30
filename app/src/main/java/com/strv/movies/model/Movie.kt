@@ -2,11 +2,13 @@ package com.strv.movies.model
 
 import com.squareup.moshi.Json
 import com.strv.movies.data.entity.MovieEntity
+import kotlin.math.roundToInt
 
 data class Movie(
     val id: Int,
     val title: String,
-    val posterPath: String
+    val posterPath: String,
+    val rating: Int
 )
 
 data class MovieDTO(
@@ -15,7 +17,9 @@ data class MovieDTO(
     @Json(name = "title")
     val title: String,
     @Json(name = "poster_path")
-    val posterPath: String
+    val posterPath: String,
+    @Json(name = "vote_average")
+    val rating: Float
 )
 
 // We get data in a way that pagination can be implemented later on :)
@@ -33,5 +37,6 @@ data class PopularMoviesDTO(
 fun MovieDTO.toEntity() = MovieEntity(
     id = id,
     title = title,
-    posterPath = posterPath
+    posterPath = posterPath,
+    rating = (rating * 10).roundToInt() // Make it as percentage - from API: vote_average * 10 🤷‍♂️
 )
