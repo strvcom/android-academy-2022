@@ -28,6 +28,12 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun removeAvatar() {
+        viewModelScope.launch {
+            moviesDataStore.removeAvatarPath()
+        }
+    }
+
     fun logout(
         onSuccess: () -> Unit
     ){

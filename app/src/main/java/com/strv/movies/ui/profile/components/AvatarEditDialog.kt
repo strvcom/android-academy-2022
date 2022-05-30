@@ -21,7 +21,8 @@ import com.strv.movies.utils.rememberCameraLauncher
 fun AvatarEditDialog(
     onDismiss: () -> Unit,
     editAvatar: (String) -> Unit,
-    removeAvatar: () -> Unit
+    removeAvatar: () -> Unit,
+    removeEnabled: Boolean,
 ) {
     val cameraLauncher = rememberCameraLauncher(onResult = editAvatar)
 
@@ -55,6 +56,7 @@ fun AvatarEditDialog(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = removeAvatar,
+                    enabled = removeEnabled,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colors.error,
                         contentColor = MaterialTheme.colors.onError
@@ -73,6 +75,7 @@ private fun AvatarEditDialogPreview() {
     AvatarEditDialog(
         onDismiss = { },
         editAvatar = { },
-        removeAvatar = {}
+        removeAvatar = {},
+        removeEnabled = false
     )
 }

@@ -66,7 +66,11 @@ fun ProfileScreen(
                     openDialog = false
                     viewModel.onNewAvatar(it)
                 },
-                removeAvatar = {}
+                removeAvatar = {
+                    openDialog = false
+                    viewModel.removeAvatar()
+                },
+                removeEnabled = avatarPath != null
             )
         }
     }
