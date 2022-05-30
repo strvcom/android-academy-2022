@@ -7,6 +7,7 @@ import com.strv.movies.data.mapper.MovieMapper
 import com.strv.movies.database.MoviesDatabase
 import com.strv.movies.extension.Either
 import com.strv.movies.model.Movie
+import com.strv.movies.model.MovieDTO
 import com.strv.movies.model.MovieDetail
 import com.strv.movies.model.MovieDetailDTO
 import com.strv.movies.model.toEntity
@@ -33,9 +34,12 @@ class MovieRepository @Inject constructor(
         }
     }
 
-    suspend fun getPopularMovies(): Either<String, List<Movie>> {
+    suspend fun fetchPopularMovies(): Either<String, List<Movie>> {
         return try {
             val popularMovies = api.getPopularMovies()
+
+            moviesDao.insertPopularMovies(popularMovies.results.map(MovieDTO::toEntity))
+
             Either.Value(popularMovies.results.map { movieMapper.map(it) })
         } catch (exception: Throwable) {
             Either.Error(exception.localizedMessage ?: "Network error")

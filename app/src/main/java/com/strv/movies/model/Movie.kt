@@ -1,6 +1,7 @@
 package com.strv.movies.model
 
 import com.squareup.moshi.Json
+import com.strv.movies.data.entity.MovieEntity
 
 data class Movie(
     val id: Int,
@@ -27,4 +28,10 @@ data class PopularMoviesDTO(
     val totalPages: Int,
     @Json(name = "total_results")
     val totalResults: Int
+)
+
+fun MovieDTO.toEntity() = MovieEntity(
+    id = id,
+    title = title,
+    posterPath = posterPath
 )

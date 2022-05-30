@@ -27,7 +27,7 @@ class MoviesListViewModel @Inject constructor(
 
     private suspend fun fetchPopularMovies() {
         Log.e("TAG", "MovieList - Start fetching data.")
-        movieRepository.getPopularMovies().fold(
+        movieRepository.fetchPopularMovies().fold(
             { error ->
                 Log.d("TAG", "MovieListLoadingError: $error")
                 _viewState.update {
