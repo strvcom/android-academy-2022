@@ -2,6 +2,7 @@ package com.strv.movies.network
 
 import androidx.room.withTransaction
 import com.strv.movies.data.dao.MoviesDao
+import com.strv.movies.data.entity.MovieEntity
 import com.strv.movies.data.entity.toDomain
 import com.strv.movies.data.mapper.MovieMapper
 import com.strv.movies.database.MoviesDatabase
@@ -45,6 +46,11 @@ class MovieRepository @Inject constructor(
             Either.Error(exception.localizedMessage ?: "Network error")
         }
     }
+
+    fun observePopularMovies(): Flow<List<Movie>> =
+        moviesDao.observePopularMovies().map {
+            it.map(MovieEntity::toDomain)
+        }
 
     fun observeMovieDetail(movieId: Int): Flow<MovieDetail?> =
         moviesDao.observeMovieDetail(movieId).map {

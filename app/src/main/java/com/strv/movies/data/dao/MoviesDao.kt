@@ -17,6 +17,9 @@ interface MoviesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPopularMovies(movies: List<MovieEntity>)
 
+    @Query("SELECT * FROM movie")
+    fun observePopularMovies(): Flow<List<MovieEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovieDetail(entity: MovieDetailEntity)
 
