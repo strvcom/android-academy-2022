@@ -48,13 +48,15 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun logOut(): Either<String, Boolean>{
+    suspend fun logOut(): Either<String, Unit>{
         return try {
-            authDataStore.sessionToken?.let {
-                authApi.deleteSession(DeleteSessionBody(sessionToken = it))
+            val sessionToken = authDataStore.sessionToken ?: return Either.Error("User not authenticated")
+            val response = authApi.deleteSession(DeleteSessionBody(sessionToken = sessionToken))
+            if(response.isSuccess) {
+                authDataStore.deleteSessionToken()
+                return Either.Value(Unit)
             }
-            authDataStore.deleteSessionToken()
-            Either.Value(true)
+            Either.Error("Something went wrong")
         } catch (exception: Throwable){
             Either.Error(exception.localizedMessage ?: "Network error")
         }
