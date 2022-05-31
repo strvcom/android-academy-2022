@@ -1,5 +1,6 @@
 package com.strv.movies.network.auth
 
+import android.util.Log
 import com.strv.movies.database.AuthDataStore
 import com.strv.movies.extension.Either
 import com.strv.movies.model.CreateSessionBody
@@ -20,18 +21,29 @@ class AuthRepository @Inject constructor(
     suspend fun logIn(username: String, password: String): Either<AuthError, Boolean>{
         return try {
             val requestToken = authApi.getRequestToken()
-            if(requestToken.isSuccess.not()) return Either.Error(AuthError.NETWORK_ERROR)
+            if(requestToken.isSuccess.not()) {
+                Log.d("AUTH", "Auth Error - Failed to get request token")
+                return Either.Error(AuthError.NETWORK_ERROR)
+            }
             val validationResponse= authApi.validateRequestToken(ValidateRequestTokenBody(
                 username = username,
                 password = password,
                 requestToken = requestToken.token
             ))
-            if(validationResponse.isSuccess.not()) return Either.Error(AuthError.INVALID_CREDENTIALS)
+            if(validationResponse.isSuccess.not()) {
+                Log.d("AUTH", "Auth Error - Failed to validate credentials")
+                return Either.Error(AuthError.INVALID_CREDENTIALS)
+            }
             val createSessionResponse = authApi.createSession(CreateSessionBody(validationResponse.requestToken))
-            if(createSessionResponse.isSuccess.not()) return Either.Error(AuthError.NETWORK_ERROR)
+            if(createSessionResponse.isSuccess.not()) {
+                Log.d("AUTH", "Auth Error - Failed to create new session")
+                return Either.Error(AuthError.NETWORK_ERROR)
+            }
             authDataStore.updateSessionToken(createSessionResponse.sessionToken)
+            Log.d("AUTH", "Auth successful")
             Either.Value(true)
-        } catch (_: Throwable) {
+        } catch (t: Throwable) {
+            Log.d("AUTH", "Auth Error - Some network fail - ${t.localizedMessage}")
             Either.Error(AuthError.NETWORK_ERROR)
         }
     }
@@ -40,7 +52,6 @@ class AuthRepository @Inject constructor(
         return try {
             authDataStore.sessionToken?.let {
                 authApi.deleteSession(DeleteSessionBody(sessionToken = it))
-
             }
             authDataStore.deleteSessionToken()
             Either.Value(true)

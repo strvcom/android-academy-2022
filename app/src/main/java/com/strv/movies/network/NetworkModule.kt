@@ -1,5 +1,6 @@
 package com.strv.movies.network
 
+import android.util.Log
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.strv.movies.BuildConfig
@@ -84,6 +85,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor { message ->
+        Log.d("HttpLoggingInterceptor", message)
     }.apply {
         level = when (BuildConfig.BUILD_TYPE == "debug") {
             true -> HttpLoggingInterceptor.Level.BODY
