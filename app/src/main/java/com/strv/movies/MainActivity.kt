@@ -17,6 +17,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,7 +55,7 @@ class MainActivity : ComponentActivity() {
             // Show bottomNavigation only for MoviesDestinations.MOVIES_LIST_ROUTE and MoviesDestinations.PROFILE_ROUTE
             bottomBarVisibility =
                 when (navBackStackEntry?.destination?.route?.substringBefore('/')) {
-                    MoviesDestinations.MOVIE_DETAIL_ROUTE -> false
+                    MoviesDestinations.MOVIE_DETAIL_ROUTE, MoviesDestinations.LOGIN_ROUTE -> false
                     else -> true
                 }
             changeStatusBarColor(isDarkTheme)
@@ -85,13 +87,16 @@ class MainActivity : ComponentActivity() {
                                 enter = slideInVertically { it },
                                 exit = slideOutVertically { it },
                             ) {
-                                MoviesBottomNavigation(navController = navController)
+                                MoviesBottomNavigation(
+                                    navController = navController,
+                                    authDataStore = viewModel.authDataStore
+                                )
                             }
                         }
                     ) { paddingValues ->
                         MoviesNavGraph(
                             modifier = Modifier.padding(paddingValues),
-                            navController = navController
+                            navController = navController,
                         )
                     }
                 }

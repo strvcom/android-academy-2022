@@ -3,6 +3,7 @@ package com.strv.movies.network
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.strv.movies.BuildConfig
+import com.strv.movies.network.auth.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,17 +16,28 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-object ApiModule {
+@Qualifier
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class UnauthorizedRetrofitOkHttpClient
 
-    @Provides
-    @Singleton
-    fun provideMovieApi(retrofit: Retrofit): MovieApi = retrofit.create()
+@Qualifier
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class AuthorizeRetrofitOkHttpClient
 
-}
+@Qualifier
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class AuthorizedRetrofit
+
+@Qualifier
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class UnauthorizedRetrofit
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -37,7 +49,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofitOkHttpClient(
+    @UnauthorizedRetrofitOkHttpClient
+    fun provideUnauthorizedRetrofitOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient {
         return OkHttpClient.Builder().apply {
@@ -58,6 +71,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @AuthorizeRetrofitOkHttpClient
+    fun provideAuthorizeRetrofitOkHttpClient(
+        @UnauthorizedRetrofitOkHttpClient okHttpClient: OkHttpClient,
+        authInterceptor: AuthInterceptor,
+    ): OkHttpClient {
+        return okHttpClient.newBuilder().apply {
+            addInterceptor(authInterceptor)
+        }.build()
+    }
+
+    @Provides
+    @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor { message ->
     }.apply {
         level = when (BuildConfig.BUILD_TYPE == "debug") {
@@ -68,12 +93,19 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
+    @UnauthorizedRetrofit
+    fun provideUnauthorizedRetrofit(@UnauthorizedRetrofitOkHttpClient okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
+
+    @Provides
+    @Singleton
+    @AuthorizedRetrofit
+    fun provideAuthorizedRetrofit(@UnauthorizedRetrofit retrofit: Retrofit, @AuthorizeRetrofitOkHttpClient okHttpClient: OkHttpClient): Retrofit =
+        retrofit.newBuilder().client(okHttpClient).build()
 
     @Provides
     fun provideMoshi(): Moshi = Moshi.Builder()
@@ -85,7 +117,7 @@ object NetworkModule {
         val originalHttpUrl = original.url
 
         val url = originalHttpUrl.newBuilder()
-            .addQueryParameter("api_key", "ADD_YOUR_KEY") // TODO ADD your key
+            .addQueryParameter("api_key", "92376bcfde6f47675e8177ac083cdb91")
             .build()
 
         // Request customization: add request headers

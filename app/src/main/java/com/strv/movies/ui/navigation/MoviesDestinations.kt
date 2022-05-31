@@ -13,6 +13,7 @@ object MoviesDestinations {
     const val MOVIES_LIST_ROUTE = "movies_list"
     const val MOVIE_DETAIL_ROUTE = "movie_detail"
     const val PROFILE_ROUTE = "user_profile"
+    const val LOGIN_ROUTE = "login"
 }
 
 sealed class BottomNavigationDestinations(

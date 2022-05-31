@@ -2,21 +2,28 @@ package com.strv.movies.ui.navigation
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.strv.movies.database.AuthDataStore
+import com.strv.movies.ui.auth.LoginScreen
 import com.strv.movies.ui.moviedetail.MovieDetailScreen
 import com.strv.movies.ui.movieslist.MoviesListScreen
+import com.strv.movies.ui.profile.ProfileScreen
 
 @Composable
 fun MoviesNavGraph(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     NavHost(
         modifier = modifier,
@@ -42,11 +49,25 @@ fun MoviesNavGraph(
         ) {
             MovieDetailScreen(viewModel = hiltViewModel())
         }
-
         composable(
             route = MoviesDestinations.PROFILE_ROUTE
         ) {
-            Text(text = "Profile screen")
+            ProfileScreen(onLogOut = {
+                navController.popBackStack(MoviesDestinations.MOVIES_LIST_ROUTE, false)
+
+            })
+        }
+
+        composable(
+            route = MoviesDestinations.LOGIN_ROUTE
+        ) {
+            LoginScreen(onSuccessfulLogin = {
+                navController.navigate(MoviesDestinations.PROFILE_ROUTE) {
+                    popUpTo(route = MoviesDestinations.LOGIN_ROUTE) {
+                        inclusive = true
+                    }
+                }
+            })
         }
     }
 }
