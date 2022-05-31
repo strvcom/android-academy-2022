@@ -13,7 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun ProfileScreen(
-    onLogOut: () -> Unit
+    onLogout: () -> Unit
 ) {
     val viewModel: ProfileViewModel = hiltViewModel()
 
@@ -21,8 +21,7 @@ fun ProfileScreen(
         Text(text = "Profile screen", style = MaterialTheme.typography.h6)
         Spacer(modifier = Modifier.size(32.dp))
         Button(onClick = {
-            viewModel.logOut()
-            onLogOut()
+            viewModel.logout(onSuccess = onLogout)
         }) {
             Text(text = "Logout")
         }

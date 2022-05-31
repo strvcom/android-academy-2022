@@ -22,7 +22,7 @@ class AuthRepository @Inject constructor(
         return try {
             val requestToken = authApi.getRequestToken()
             if(requestToken.isSuccess.not()) {
-                Log.d("AUTH", "Auth Error - Failed to get request token")
+                Log.d("TAG", "Auth Error - Failed to get request token")
                 return Either.Error(AuthError.NETWORK_ERROR)
             }
             val validationResponse= authApi.validateRequestToken(ValidateRequestTokenBody(
@@ -31,19 +31,19 @@ class AuthRepository @Inject constructor(
                 requestToken = requestToken.token
             ))
             if(validationResponse.isSuccess.not()) {
-                Log.d("AUTH", "Auth Error - Failed to validate credentials")
+                Log.d("TAG", "Auth Error - Failed to validate credentials")
                 return Either.Error(AuthError.INVALID_CREDENTIALS)
             }
             val createSessionResponse = authApi.createSession(CreateSessionBody(validationResponse.requestToken))
             if(createSessionResponse.isSuccess.not()) {
-                Log.d("AUTH", "Auth Error - Failed to create new session")
+                Log.d("TAG", "Auth Error - Failed to create new session")
                 return Either.Error(AuthError.NETWORK_ERROR)
             }
             authDataStore.updateSessionToken(createSessionResponse.sessionToken)
-            Log.d("AUTH", "Auth successful")
+            Log.d("TAG", "Auth successful")
             Either.Value(true)
         } catch (t: Throwable) {
-            Log.d("AUTH", "Auth Error - Some network fail - ${t.localizedMessage}")
+            Log.d("TAG", "Auth Error - Some network fail - ${t.localizedMessage}")
             Either.Error(AuthError.NETWORK_ERROR)
         }
     }

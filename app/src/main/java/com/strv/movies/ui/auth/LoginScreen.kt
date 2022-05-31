@@ -12,12 +12,9 @@ fun LoginScreen(
     onSuccessfulLogin: () -> Unit,
 ) {
     val viewModel: LoginViewModel = hiltViewModel()
-    val error by viewModel.error.collectAsState(initial = null)
     Button(onClick = {
         viewModel.login(onSuccessfulLogin)
     }) {
         Text(text = "Login")
     }
-
-    Text(text = error ?: "")
 }
