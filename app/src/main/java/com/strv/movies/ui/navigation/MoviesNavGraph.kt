@@ -1,6 +1,8 @@
 package com.strv.movies.ui.navigation
 
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -13,9 +15,11 @@ import com.strv.movies.ui.movieslist.MoviesListScreen
 
 @Composable
 fun MoviesNavGraph(
+    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
+        modifier = modifier,
         navController = navController,
         startDestination = MoviesDestinations.MOVIES_LIST_ROUTE
     ) {
@@ -37,6 +41,12 @@ fun MoviesNavGraph(
             )
         ) {
             MovieDetailScreen(viewModel = hiltViewModel())
+        }
+
+        composable(
+            route = MoviesDestinations.PROFILE_ROUTE
+        ) {
+            Text(text = "Profile screen")
         }
     }
 }

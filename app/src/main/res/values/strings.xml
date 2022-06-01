@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Movies</string>
     <string name="movie_image">Movie image</string>
+    <string name="movie_list_title">Movies</string>
+    <string name="movie_detail_title">Detail</string>
+    <string name="profile_title">My Profile</string>
 </resources>
