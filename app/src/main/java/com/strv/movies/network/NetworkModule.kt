@@ -15,7 +15,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -23,12 +22,12 @@ import javax.inject.Singleton
 @Qualifier
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
-annotation class UnauthorizedRetrofitOkHttpClient
+annotation class UnauthorizedOkHttpClient
 
 @Qualifier
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
-annotation class AuthorizeRetrofitOkHttpClient
+annotation class AuthorizedOkHttpClient
 
 @Qualifier
 @MustBeDocumented
@@ -47,10 +46,9 @@ object NetworkModule {
     private const val MAX_PARALLEL_REQUESTS = 5
     private const val BASE_URL: String = "https://api.themoviedb.org/3/"
 
-
     @Provides
     @Singleton
-    @UnauthorizedRetrofitOkHttpClient
+    @UnauthorizedOkHttpClient
     fun provideUnauthorizedRetrofitOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient {
@@ -72,9 +70,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @AuthorizeRetrofitOkHttpClient
+    @AuthorizedOkHttpClient
     fun provideAuthorizeRetrofitOkHttpClient(
-        @UnauthorizedRetrofitOkHttpClient okHttpClient: OkHttpClient,
+        @UnauthorizedOkHttpClient okHttpClient: OkHttpClient,
         authInterceptor: AuthInterceptor,
     ): OkHttpClient {
         return okHttpClient.newBuilder().apply {
@@ -96,7 +94,7 @@ object NetworkModule {
     @Provides
     @Singleton
     @UnauthorizedRetrofit
-    fun provideUnauthorizedRetrofit(@UnauthorizedRetrofitOkHttpClient okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
+    fun provideUnauthorizedRetrofit(@UnauthorizedOkHttpClient okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
@@ -106,7 +104,7 @@ object NetworkModule {
     @Provides
     @Singleton
     @AuthorizedRetrofit
-    fun provideAuthorizedRetrofit(@UnauthorizedRetrofit retrofit: Retrofit, @AuthorizeRetrofitOkHttpClient okHttpClient: OkHttpClient): Retrofit =
+    fun provideAuthorizedRetrofit(@UnauthorizedRetrofit retrofit: Retrofit, @AuthorizedOkHttpClient okHttpClient: OkHttpClient): Retrofit =
         retrofit.newBuilder().client(okHttpClient).build()
 
     @Provides

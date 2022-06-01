@@ -96,7 +96,7 @@ class MainActivity : ComponentActivity() {
                     ) { paddingValues ->
                         MoviesNavGraph(
                             modifier = Modifier.padding(paddingValues),
-                            navController = navController,
+                            navController = navController
                         )
                     }
                 }
