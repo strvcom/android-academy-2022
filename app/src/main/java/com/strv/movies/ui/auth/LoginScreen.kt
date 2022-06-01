@@ -6,12 +6,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun LoginScreen(
+    viewModel: LoginViewModel = viewModel(),
     onSuccessfulLogin: () -> Unit,
 ) {
-    val viewModel: LoginViewModel = hiltViewModel()
+
     Button(onClick = {
         viewModel.login(onSuccessfulLogin)
     }) {

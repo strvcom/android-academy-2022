@@ -46,22 +46,27 @@ fun MoviesNavGraph(
         composable(
             route = MoviesDestinations.PROFILE_ROUTE
         ) {
-            ProfileScreen(onLogout = {
-                navController.popBackStack(MoviesDestinations.MOVIES_LIST_ROUTE, false)
-
-            })
+            ProfileScreen(
+                viewModel = hiltViewModel(),
+                onLogout = {
+                    navController.popBackStack(MoviesDestinations.MOVIES_LIST_ROUTE, false)
+                }
+            )
         }
 
         composable(
             route = MoviesDestinations.LOGIN_ROUTE
         ) {
-            LoginScreen(onSuccessfulLogin = {
-                navController.navigate(MoviesDestinations.PROFILE_ROUTE) {
-                    popUpTo(route = MoviesDestinations.LOGIN_ROUTE) {
-                        inclusive = true
+            LoginScreen(
+                viewModel = hiltViewModel(),
+                onSuccessfulLogin = {
+                    navController.navigate(MoviesDestinations.PROFILE_ROUTE) {
+                        popUpTo(route = MoviesDestinations.LOGIN_ROUTE) {
+                            inclusive = true
+                        }
                     }
                 }
-            })
+            )
         }
     }
 }

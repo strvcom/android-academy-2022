@@ -10,12 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun ProfileScreen(
+    viewModel: ProfileViewModel = viewModel(),
     onLogout: () -> Unit
 ) {
-    val viewModel: ProfileViewModel = hiltViewModel()
 
     Column {
         Text(text = "Profile screen", style = MaterialTheme.typography.h6)
