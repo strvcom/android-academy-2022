@@ -1,5 +1,6 @@
 package com.strv.movies.model
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.strv.movies.data.entity.GenreEntity
 import com.strv.movies.data.entity.MovieGenreEntity
@@ -9,6 +10,7 @@ data class Genre(
     val name: String
 )
 
+@Keep
 data class GenreDTO(
     @Json(name = "id") val id: Int,
     @Json(name = "name") val name: String

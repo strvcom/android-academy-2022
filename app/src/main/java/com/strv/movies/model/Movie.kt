@@ -1,5 +1,6 @@
 package com.strv.movies.model
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 
 data class Movie(
@@ -8,6 +9,7 @@ data class Movie(
     val posterPath: String
 )
 
+@Keep
 data class MovieDTO(
     @Json(name = "id")
     val id: Int,
@@ -17,6 +19,7 @@ data class MovieDTO(
     val posterPath: String
 )
 
+@Keep
 // We get data in a way that pagination can be implemented later on :)
 data class PopularMoviesDTO(
     @Json(name = "results")

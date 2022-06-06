@@ -1,8 +1,10 @@
 package com.strv.movies.model
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.strv.movies.data.entity.MovieDetailEntity
 
+@Keep
 // Used for getting data from network
 data class MovieDetailDTO(
     @Json(name = "id")

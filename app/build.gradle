@@ -31,10 +31,26 @@ android {
         }
     }
 
-    buildTypes {
+    signingConfigs {
         release {
-            minifyEnabled false
+            storeFile file('./android-academy-2022.keystore')
+            keyAlias ALIAS
+            keyPassword KEY_PASSWORD
+            storePassword KEYSTORE_PASSWORD
+        }
+    }
+
+    buildTypes {
+
+        release {
+            crunchPngs true
+            minifyEnabled true //code shrinking, obfuscation and optimization
+            shrinkResources true //resource shrinking
+
+            proguardFile '../proguard-rules/proguard-room.pro' //This is not required and it's here as an example
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
