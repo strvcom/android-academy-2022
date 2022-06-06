@@ -20,6 +20,10 @@ android {
             useSupportLibrary true
         }
 
+        buildConfigField "String", 'TMDB_API_KEY', getEnvString("TMDB_API_KEY", "")
+        buildConfigField "String", 'TMDB_USER_NAME', getEnvString("TMDB_USER_NAME", "")
+        buildConfigField "String", 'TMDB_PASSWORD', getEnvString("TMDB_PASSWORD", "")
+
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas")
@@ -95,4 +99,13 @@ dependencies {
 
     //Accompanist
     implementation("com.google.accompanist:accompanist-permissions:0.17.0")
+}
+
+static String getEnv(String name, String defaultVal) {
+    return System.getenv(name) ?: defaultVal
+}
+
+// wrap the result in quotes so it won't be evaluated by the buildConfig
+static String getEnvString(String name, String defaultVal) {
+    return '"' + getEnv(name, defaultVal) + '"'
 }

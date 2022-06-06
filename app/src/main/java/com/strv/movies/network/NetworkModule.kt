@@ -116,8 +116,14 @@ object NetworkModule {
         val original = chain.request()
         val originalHttpUrl = original.url
 
+        val apiKey = BuildConfig.TMDB_API_KEY
+        if (apiKey.isBlank()){
+            //Keep app crashing in this case so we will not call TMDB with invalid api key.
+            throw IllegalStateException("TMDB_API_KEY is NOT SET! Check local environment variables.")
+        }
+
         val url = originalHttpUrl.newBuilder()
-            .addQueryParameter("api_key", "ADD_YOUR_KEY") // TODO ADD your key
+            .addQueryParameter("api_key", BuildConfig.TMDB_API_KEY )
             .build()
 
         // Request customization: add request headers
