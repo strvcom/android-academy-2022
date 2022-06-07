@@ -1,0 +1,33 @@
+ext {
+    majorVersion = "1"
+    minorVersion = "0"
+    patchVersion = "0"
+
+    versionCode = getVersionCode()
+    versionName = getVersionName()
+}
+
+static int getNumberOfTags() {
+    def command = 'git tag'.execute() | 'wc -l'.execute()
+    def result = command.waitFor()
+    def count = (result == 0) ? command.inputStream.text.trim().toInteger() : 1
+    return count
+}
+
+
+//Assumption for this approach is adding a tag for every new release (which might be realize on the CI server automatically)
+static int getVersionCode() {
+    return getNumberOfTags()
+}
+
+String getVersionName() {
+    return "$majorVersion.$minorVersion.$patchVersion-" + getVersionCode()
+}
+
+// Help task ./gradlew -q printVersionInfo
+tasks.register("printVersionInfo") {
+    doLast {
+        println "versionCode = " + getVersionCode()
+        println "versionName = " + getVersionName()
+    }
+}

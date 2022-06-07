@@ -5,6 +5,8 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+apply from: 'versioning.gradle'
+
 android {
     compileSdk 32
 
@@ -12,8 +14,10 @@ android {
         applicationId "com.strv.movies"
         minSdk 23
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode project.versionCode
+        versionName project.versionName
+
+        setProperty("archivesBaseName", applicationId + "-" + versionName)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -47,7 +51,8 @@ android {
             minifyEnabled true //code shrinking, obfuscation and optimization
             shrinkResources true //resource shrinking
 
-            proguardFile '../proguard-rules/proguard-room.pro' //This is not required and it's here as an example
+            //proguard-room.pro is not required but it's here as an example
+            proguardFile '../proguard-rules/proguard-room.pro'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             signingConfig signingConfigs.release
