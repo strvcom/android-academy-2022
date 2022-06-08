@@ -120,6 +120,9 @@ dependencies {
 
     //Accompanist
     implementation("com.google.accompanist:accompanist-permissions:0.17.0")
+
+    //Logging
+    implementation "com.jakewharton.timber:timber:5.0.1"
 }
 
 static String getEnv(String name, String defaultVal) {
