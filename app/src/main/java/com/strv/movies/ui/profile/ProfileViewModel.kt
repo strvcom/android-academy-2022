@@ -9,6 +9,7 @@ import com.strv.movies.network.auth.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -36,11 +37,11 @@ class ProfileViewModel @Inject constructor(
 
     fun logout(
         onSuccess: () -> Unit
-    ){
+    ) {
         viewModelScope.launch {
             authRepository.logOut().fold(
                 {
-                    Log.d("TAG", "Logout failed")
+                    Timber.d("Logout failed")
                 },
                 {
                     onSuccess()

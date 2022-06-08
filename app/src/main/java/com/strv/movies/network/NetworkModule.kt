@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -83,7 +84,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor { message ->
-        Log.d("HttpLoggingInterceptor", message)
+        Timber.d(message)
     }.apply {
         level = when (BuildConfig.BUILD_TYPE == "debug") {
             true -> HttpLoggingInterceptor.Level.BODY
@@ -94,7 +95,10 @@ object NetworkModule {
     @Provides
     @Singleton
     @UnauthorizedRetrofit
-    fun provideUnauthorizedRetrofit(@UnauthorizedOkHttpClient okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
+    fun provideUnauthorizedRetrofit(
+        @UnauthorizedOkHttpClient okHttpClient: OkHttpClient,
+        moshi: Moshi
+    ): Retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
@@ -104,7 +108,10 @@ object NetworkModule {
     @Provides
     @Singleton
     @AuthorizedRetrofit
-    fun provideAuthorizedRetrofit(@UnauthorizedRetrofit retrofit: Retrofit, @AuthorizedOkHttpClient okHttpClient: OkHttpClient): Retrofit =
+    fun provideAuthorizedRetrofit(
+        @UnauthorizedRetrofit retrofit: Retrofit,
+        @AuthorizedOkHttpClient okHttpClient: OkHttpClient
+    ): Retrofit =
         retrofit.newBuilder().client(okHttpClient).build()
 
     @Provides
@@ -117,13 +124,13 @@ object NetworkModule {
         val originalHttpUrl = original.url
 
         val apiKey = BuildConfig.TMDB_API_KEY
-        if (apiKey.isBlank()){
+        if (apiKey.isBlank()) {
             //Keep app crashing in this case so we will not call TMDB with invalid api key.
             throw IllegalStateException("TMDB_API_KEY is NOT SET! Check local environment variables.")
         }
 
         val url = originalHttpUrl.newBuilder()
-            .addQueryParameter("api_key", BuildConfig.TMDB_API_KEY )
+            .addQueryParameter("api_key", BuildConfig.TMDB_API_KEY)
             .build()
 
         // Request customization: add request headers

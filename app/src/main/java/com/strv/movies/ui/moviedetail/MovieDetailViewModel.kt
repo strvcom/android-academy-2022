@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,7 +42,7 @@ class MovieDetailViewModel @Inject constructor(
         viewModelScope.launch {
             movieRepository.fetchMovieDetail(movieId).fold(
                 { error ->
-                    Log.d("TAG", "MovieDetailLoadingError: $error")
+                    Timber.d("MovieDetailLoadingError: $error")
                     _viewState.update {
                         MovieDetailViewState(
                             error = error
@@ -49,7 +50,7 @@ class MovieDetailViewModel @Inject constructor(
                     }
                 },
                 { movieTitle ->
-                    Log.d("TAG", "MovieDetailLoaded: $movieTitle")
+                    Timber.d("MovieDetailLoaded: $movieTitle")
                 }
             )
         }

@@ -8,6 +8,7 @@ import com.strv.movies.extension.fold
 import com.strv.movies.network.auth.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +23,7 @@ class LoginViewModel @Inject constructor(
                 password = BuildConfig.TMDB_PASSWORD
             ).fold(
                 { error ->
-                    Log.d("TAG", "Login failed - ${error.name}")
+                    Timber.d("Login failed - ${error.name}")
                 },
                 {
                     onSuccess()

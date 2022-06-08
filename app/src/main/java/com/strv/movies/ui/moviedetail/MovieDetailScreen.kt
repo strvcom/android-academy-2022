@@ -34,6 +34,7 @@ import com.strv.movies.model.Genre
 import com.strv.movies.model.MovieDetail
 import com.strv.movies.ui.error.ErrorScreen
 import com.strv.movies.ui.loading.LoadingScreen
+import timber.log.Timber
 
 @Composable
 fun MovieDetailScreen(
@@ -63,7 +64,7 @@ fun MovieDetail(
     setVideoProgress: (second: Float) -> Unit
 ) {
     Column {
-        Log.d("TAG", "MovieDetail: $videoProgress")
+        Timber.d("MovieDetail: $videoProgress")
 
         MovieTrailerPlayer(
             videoId = OfflineMoviesProvider.getTrailer(movie.id).key,

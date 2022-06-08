@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,10 +27,10 @@ class MoviesListViewModel @Inject constructor(
     }
 
     private suspend fun fetchPopularMovies() {
-        Log.e("TAG", "MovieList - Start fetching data.")
+        Timber.e("MovieList - Start fetching data.")
         movieRepository.getPopularMovies().fold(
             { error ->
-                Log.d("TAG", "MovieListLoadingError: $error")
+                Timber.d("MovieListLoadingError: $error")
                 _viewState.update {
                     MoviesListViewState(
                         error = error
@@ -37,7 +38,7 @@ class MoviesListViewModel @Inject constructor(
                 }
             },
             { movieList ->
-                Log.e("TAG", "MovieListSuccess: ${movieList.size}")
+                Timber.e("MovieListSuccess: ${movieList.size}")
                 _viewState.update {
                     MoviesListViewState(
                         movies = movieList
