@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.strv.movies.ui.auth.LoginScreen
 import com.strv.movies.ui.moviedetail.MovieDetailScreen
+import com.strv.movies.ui.moviedetail.MovieDetailViewScreen
 import com.strv.movies.ui.movieslist.MoviesListScreen
 import com.strv.movies.ui.profile.ProfileScreen
 
@@ -41,7 +42,12 @@ fun MoviesNavGraph(
                 }
             )
         ) {
-            MovieDetailScreen(viewModel = hiltViewModel())
+            val useViewSystem = true
+
+            if(useViewSystem)
+                MovieDetailViewScreen(viewModel = hiltViewModel())
+            else
+                MovieDetailScreen(viewModel = hiltViewModel())
         }
         composable(
             route = MoviesDestinations.PROFILE_ROUTE
