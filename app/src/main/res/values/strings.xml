@@ -4,4 +4,16 @@
     <string name="movie_list_title">Movies</string>
     <string name="movie_detail_title">Detail</string>
     <string name="profile_title">My Profile</string>
+
+    <string name="login_login">Login</string>
+    <string name="login_username">Username</string>
+    <string name="login_contentDesc_emailIcon">Email Icon</string>
+    <string name="login_contentDesc_passwordIcon">Password Icon</string>
+    <string name="login_password">Password</string>
+    <string name="login_contentDesc_visibilityIcon">Visibility Icon</string>
+    <string name="login_forgotPassword">Forgot your password?</string>
+    <string name="login_signup">Create new account</string>
+    <string name="login_contentDesc_googleIcon">Google logo</string>
+    <string name="login_contentDesc_facebookIcon">Facebook icon</string>
+    <string name="detailScreen_navigateBack">Go back to movie list</string>
 </resources>
