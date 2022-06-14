@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.load
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -40,6 +41,8 @@ fun MovieDetailViewScreen(
                 lifecycle,
                 viewModel::updateVideoProgress
             )
+
+            imageCover.load("https://image.tmdb.org/t/p/w500${viewState.movie?.posterPath}")
         }
     }
 }
