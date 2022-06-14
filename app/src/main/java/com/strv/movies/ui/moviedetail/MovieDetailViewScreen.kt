@@ -1,11 +1,18 @@
 package com.strv.movies.ui.moviedetail
 
 import android.content.res.Configuration
+import android.graphics.Color
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -25,6 +32,7 @@ fun MovieDetailViewScreen(
     val viewState by viewModel.viewState.collectAsState(MovieDetailViewState(loading = true))
     val configuration = LocalConfiguration.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val useDarkTheme = !MaterialTheme.colors.isLight
 
     if (viewState.loading) {
         LoadingScreen()
@@ -33,6 +41,15 @@ fun MovieDetailViewScreen(
     } else {
         AndroidViewBinding(factory = MovieDetailBinding::inflate) {
             textTitle.text = viewState.movie?.title
+            textTitle.setTextColor(if (useDarkTheme) Color.WHITE else Color.BLACK)
+
+            textDescription.setContent {
+                Text(
+                    viewState.movie?.overview ?: "",
+                    modifier = Modifier.padding(top = 8.dp, start = 20.dp, end = 20.dp),
+                    textAlign = TextAlign.Justify
+                )
+            }
 
             setupYoutubePlayer(
                 youtubePlayer,
