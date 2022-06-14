@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.strv.movies.ui.auth.LogInScreen
 import com.strv.movies.ui.moviedetail.MovieDetailScreen
 import com.strv.movies.ui.movieslist.MoviesListScreen
 import com.strv.movies.ui.profile.ProfileScreen
@@ -31,7 +32,6 @@ fun MoviesNavGraph(
                 viewModel = hiltViewModel()
             )
         }
-
         composable(
             route = "${MoviesDestinations.MOVIE_DETAIL_ROUTE}/{${MoviesNavArguments.MOVIE_ID_KEY}}",
             arguments = listOf(
@@ -56,7 +56,7 @@ fun MoviesNavGraph(
         composable(
             route = MoviesDestinations.LOGIN_ROUTE
         ) {
-            LoginScreen(
+            LogInScreen(
                 viewModel = hiltViewModel(),
                 onSuccessfulLogin = {
                     navController.navigate(MoviesDestinations.PROFILE_ROUTE) {

@@ -20,8 +20,8 @@ class LoginViewModel @Inject constructor(
     fun login(onSuccess: () -> Unit) {
         viewModelScope.launch {
             authRepository.logIn(
-                username = "YOUR NAME HERE",
-                password = "YOUR PASSWORD HERE"
+                username = _viewState.value.user,
+                password = _viewState.value.password
             ).fold(
                 { error ->
                     Log.d("TAG", "Login failed - ${error.name}")
@@ -40,7 +40,6 @@ class LoginViewModel @Inject constructor(
         _viewState.update {
             it.copy(user = input)
         }
-        Log.d("TAG", "LoginViewModel - ${_viewState.value.user}")
     }
 
     fun updatePassword(input: String) {
@@ -48,19 +47,5 @@ class LoginViewModel @Inject constructor(
             it.copy(password = input)
 
         }
-        Log.d("TAG", "LoginViewModel - ${_viewState.value.password}")
     }
-
-    fun login(): Boolean {
-        val userName = _viewState.value.user
-        val password = _viewState.value.password
-        if (userName.isNotBlank() && password.isNotBlank()) {
-            return true
-        } else {
-            _viewState.update { it.copy(error = "Please fill in user name and password") }
-            Log.d("TAG", "LoginViewModel - error")
-            return false
-        }
-    }
-
 }

@@ -34,10 +34,10 @@ fun MoviesBottomNavigation(
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 onClick = {
                     // Uncomment this to require user to be logged to open profile screen
-//                    if (screen is BottomNavigationDestinations.UserProfile && isAuthenticated.not()) {
-//                        navController.navigate(MoviesDestinations.LOGIN_ROUTE)
-//                        return@BottomNavigationItem
-//                    }
+                    if (screen is BottomNavigationDestinations.UserProfile && isAuthenticated.not()) {
+                        navController.navigate(MoviesDestinations.LOGIN_ROUTE)
+                        return@BottomNavigationItem
+                    }
                     navController.navigate(screen.route) {
 
                         // Pop up to the start destination of the graph to
