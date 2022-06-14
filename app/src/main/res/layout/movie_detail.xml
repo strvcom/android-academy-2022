@@ -48,5 +48,19 @@
             app:layout_constraintStart_toEndOf="@id/image_cover"
             app:layout_constraintTop_toBottomOf="@id/text_title" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_labels"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintTop_toBottomOf="@id/text_description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

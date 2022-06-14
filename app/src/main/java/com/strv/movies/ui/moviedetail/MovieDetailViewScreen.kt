@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -60,6 +62,11 @@ fun MovieDetailViewScreen(
             )
 
             imageCover.load("https://image.tmdb.org/t/p/w500${viewState.movie?.posterPath}")
+
+            recyclerLabels.layoutManager =
+                LinearLayoutManager(root.context, LinearLayoutManager.HORIZONTAL, false)
+            recyclerLabels.adapter =
+                LabelsAdapter(viewState.movie?.genres?.map { it.name } ?: emptyList())
         }
     }
 }
