@@ -27,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -51,6 +52,8 @@ fun LogInScreen(
     val coroutineScope = rememberCoroutineScope()
     val userName = viewState.user
     val password = viewState.password
+    val uriHandler = LocalUriHandler.current
+    val uri = stringResource(id = R.string.login_signup_link)
     var passwordVisibility by rememberSaveable {
         mutableStateOf(false)
     }
@@ -212,7 +215,9 @@ fun LogInScreen(
             }
             ClickableText(
                 text = AnnotatedString(stringResource(R.string.login_signup)),
-                onClick = {},
+                onClick = {
+                    uriHandler.openUri(uri)
+                },
                 modifier = Modifier
                     .align(CenterHorizontally)
                     .padding(top = 20.dp),
