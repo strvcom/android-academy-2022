@@ -53,7 +53,8 @@ fun LogInScreen(
     val userName = viewState.user
     val password = viewState.password
     val uriHandler = LocalUriHandler.current
-    val uri = stringResource(id = R.string.login_signup_link)
+    val uriSignIn = stringResource(id = R.string.login_signup_link)
+    val uriPassword = stringResource(R.string.login_password_reset)
     var passwordVisibility by rememberSaveable {
         mutableStateOf(false)
     }
@@ -176,7 +177,9 @@ fun LogInScreen(
 
             ClickableText(
                 text = AnnotatedString(stringResource(R.string.login_forgotPassword)),
-                onClick = {},
+                onClick = {
+                          uriHandler.openUri(uriPassword)
+                },
                 style = TextStyle(
                     color = MaterialTheme.colors.onBackground,
                     textDecoration = TextDecoration.Underline
@@ -216,7 +219,7 @@ fun LogInScreen(
             ClickableText(
                 text = AnnotatedString(stringResource(R.string.login_signup)),
                 onClick = {
-                    uriHandler.openUri(uri)
+                    uriHandler.openUri(uriSignIn)
                 },
                 modifier = Modifier
                     .align(CenterHorizontally)
