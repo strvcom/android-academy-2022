@@ -1,6 +1,7 @@
 package com.strv.movies.network
 
 import com.strv.movies.network.auth.AuthApi
+import com.strv.movies.network.profile.ProfileApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,4 +21,8 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideAuthApi(@UnauthorizedRetrofit retrofit: Retrofit): AuthApi = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideProfileApi(@AuthorizedRetrofit retrofit: Retrofit): ProfileApi = retrofit.create()
 }

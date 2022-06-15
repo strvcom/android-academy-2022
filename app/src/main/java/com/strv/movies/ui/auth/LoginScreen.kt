@@ -20,6 +20,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -92,6 +95,7 @@ fun LogInScreen(
                 modifier = Modifier.fillMaxWidth(0.8f),
                 value = userName,
                 onValueChange = { viewModel.loginEvent(LoginEvent.UpdateUsername(it)) },
+                maxLines = 1,
                 label = {
                     Text(
                         text = stringResource(
@@ -99,10 +103,10 @@ fun LogInScreen(
                         )
                     )
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_email),
+                        imageVector = Icons.Default.Person,
                         contentDescription = stringResource
                             (R.string.login_contentDesc_emailIcon)
                     )
@@ -122,6 +126,7 @@ fun LogInScreen(
                         )
                     )
                 },
+                maxLines = 1,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 visualTransformation = if (passwordVisibility) {
                     VisualTransformation.None
@@ -130,7 +135,7 @@ fun LogInScreen(
                 },
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_key),
+                        imageVector = Icons.Default.Lock,
                         contentDescription = stringResource(
                             R.string.login_contentDesc_passwordIcon
                         )
