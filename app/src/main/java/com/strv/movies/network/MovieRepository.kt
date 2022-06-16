@@ -49,7 +49,10 @@ class MovieRepository @Inject constructor(
                 //but it would be a bit heavier
 
                 moviesDao.insertPopularMovies(response)
-                emit(Either.Value(moviesDao.observePopularMovies().map { it.toDomain() }))
+                val cachedMovies = moviesDao.observePopularMovies()
+                    .map { it.toDomain() }
+                    .sortedByDescending { it.popularity }
+                emit(Either.Value(cachedMovies))
             } catch (t: Throwable) {
                 emit(Either.Error(t.localizedMessage ?: "Network Error"))
             }
