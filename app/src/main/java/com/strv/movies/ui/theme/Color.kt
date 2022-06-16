@@ -3,6 +3,7 @@ package com.strv.movies.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val md_theme_light_primary = Color(0xFF006a60)
+val md_theme_light_primaryVariant = Color(0xFF0DD5C2)
 val md_theme_light_onPrimary = Color(0xFFffffff)
 val md_theme_light_secondary = Color(0xFF006b5c)
 val md_theme_light_onSecondary = Color(0xFFffffff)
@@ -14,6 +15,7 @@ val md_theme_light_surface = Color(0xFFFFFBFE)
 val md_theme_light_onSurface = Color(0xFF1C1B1F)
 
 val md_theme_dark_primary = Color(0xFF51dbcc)
+val md_theme_dark_primaryVariant = Color(0xFF9EEBE2)
 val md_theme_dark_onPrimary = Color(0xFF003731)
 val md_theme_dark_secondary = Color(0xFF34dec3)
 val md_theme_dark_onSecondary = Color(0xFF00382f)

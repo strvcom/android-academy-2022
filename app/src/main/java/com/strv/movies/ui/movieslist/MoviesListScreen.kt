@@ -7,21 +7,40 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.strv.movies.R
@@ -58,6 +77,30 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
             model = "https://image.tmdb.org/t/p/h632${movie.posterPath}",
             contentDescription = stringResource(id = R.string.movie_image)
         )
+        Row(
+            modifier = Modifier
+                .wrapContentWidth(align = Alignment.Start)
+                .padding(4.dp)
+                .clip(shape = MaterialTheme.shapes.medium)
+                .background(MaterialTheme.colors.primary)
+        ) {
+            Icon(
+                modifier = Modifier.background(MaterialTheme.colors.primaryVariant)
+                    .padding(2.dp),
+                imageVector = Icons.Default.Star,
+                contentDescription = stringResource(R.string.movies_list_popularity_icon)
+            )
+            Text(
+                text = movie.popularity.dec().toString(),
+                maxLines = 1,
+                fontWeight = FontWeight.Light,
+                fontSize = 12.sp,
+                color = MaterialTheme.colors.onPrimary,
+                modifier = Modifier
+                    .padding(horizontal = 2.dp)
+                    .align(CenterVertically)
+            )
+        }
     }
 }
 
