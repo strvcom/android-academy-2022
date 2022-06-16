@@ -23,7 +23,7 @@ class AuthRepository @Inject constructor(
             val requestToken = authApi.getRequestToken()
             if(requestToken.isSuccess.not()) {
                 Log.d("TAG", "Auth Error - Failed to get request token")
-                return Either.Error(AuthError.NETWORK_ERROR)
+                return Either.Error(AuthError.INVALID_CREDENTIALS)
             }
             val validationResponse= authApi.validateRequestToken(ValidateRequestTokenBody(
                 username = username,

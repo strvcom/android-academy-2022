@@ -67,7 +67,7 @@ fun LogInScreen(
         Log.d("TAG", "launch effect launched")
         coroutineScope.launch {
             viewModel.errorFlow.collect {
-                snackBarHostState.showSnackbar(message = it)
+                snackBarHostState.showSnackbar(message = it.message)
             }
         }
     }
@@ -107,7 +107,7 @@ fun LogInScreen(
                         )
                     )
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Person,
@@ -178,7 +178,7 @@ fun LogInScreen(
             ClickableText(
                 text = AnnotatedString(stringResource(R.string.login_forgotPassword)),
                 onClick = {
-                          uriHandler.openUri(uriPassword)
+                    uriHandler.openUri(uriPassword)
                 },
                 style = TextStyle(
                     color = MaterialTheme.colors.onBackground,
@@ -191,7 +191,9 @@ fun LogInScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 IconButton(
-                    onClick = { },
+                    onClick = {
+                        viewModel.loginEvent(LoginEvent.OnClickNotImplemented)
+                    },
                     modifier = Modifier
                 ) {
                     Image(
@@ -203,7 +205,9 @@ fun LogInScreen(
                 }
 
                 IconButton(
-                    onClick = { },
+                    onClick = {
+                        viewModel.loginEvent(LoginEvent.OnClickNotImplemented)
+                    },
                     modifier = Modifier
                         .clip(CircleShape)
                         .background(color = login_facebookLogo)

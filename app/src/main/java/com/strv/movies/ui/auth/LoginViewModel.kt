@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.strv.movies.extension.fold
+import com.strv.movies.network.auth.AuthError
 import com.strv.movies.network.auth.AuthRepository
 import com.strv.movies.network.auth.LoginEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,17 +21,23 @@ class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    private val _errorFlow = Channel<String>()
+    private val _errorFlow = Channel<LoginSnackbarNotification>()
     val errorFlow = _errorFlow.receiveAsFlow()
 
     private val _viewState = MutableStateFlow(LoginViewState())
     val viewState = _viewState.asStateFlow()
+
 
     fun loginEvent(event: LoginEvent) {
         when (event) {
             is LoginEvent.Login -> login(onSuccess = event.onSuccess)
             is LoginEvent.UpdatePassword -> updatePassword(event.input)
             is LoginEvent.UpdateUsername -> updateName(event.input)
+            LoginEvent.OnClickNotImplemented -> {
+                viewModelScope.launch {
+                    _errorFlow.send(LoginSnackbarNotification.FunctionNotSupported)
+                }
+            }
         }
     }
 
@@ -42,11 +49,15 @@ class LoginViewModel @Inject constructor(
             ).fold(
                 { error ->
                     if (_viewState.value.user.isBlank()) {
-                        _errorFlow.send("Please fill in the username")
+                        _errorFlow.send(LoginSnackbarNotification.UsernameSnackbar)
                     } else if (_viewState.value.password.isBlank()) {
-                        _errorFlow.send("Please fill in the password")
+                        _errorFlow.send(LoginSnackbarNotification.PasswordSnackbar)
+                    } else if (error == AuthError.NETWORK_ERROR) {
+                        _errorFlow.send(LoginSnackbarNotification.NetworkError)
+                    } else if (error == AuthError.INVALID_CREDENTIALS) {
+                        _errorFlow.send(LoginSnackbarNotification.CredentialsError)
                     } else {
-                        _errorFlow.send("Wrong credentials")
+                        _errorFlow.send(LoginSnackbarNotification.GenericError)
                     }
                     Log.d("TAG", "Login failed - ${error.name}")
                 },
