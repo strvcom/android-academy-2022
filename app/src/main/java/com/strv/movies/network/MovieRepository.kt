@@ -3,7 +3,6 @@ package com.strv.movies.network
 import androidx.room.withTransaction
 import com.strv.movies.data.dao.MoviesDao
 import com.strv.movies.data.entity.toDomain
-import com.strv.movies.data.mapper.MovieMapper
 import com.strv.movies.database.MoviesDatabase
 import com.strv.movies.extension.Either
 import com.strv.movies.model.Movie
@@ -11,6 +10,8 @@ import com.strv.movies.model.MovieDetail
 import com.strv.movies.model.MovieDetailDTO
 import com.strv.movies.model.toEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,7 +20,6 @@ import javax.inject.Singleton
 class MovieRepository @Inject constructor(
     private val api: MovieApi,
     private val moviesDao: MoviesDao,
-    private val movieMapper: MovieMapper,
     private val moviesDatabase: MoviesDatabase
 ) {
 
@@ -33,14 +33,27 @@ class MovieRepository @Inject constructor(
         }
     }
 
-    suspend fun getPopularMovies(): Either<String, List<Movie>> {
-        return try {
-            val popularMovies = api.getPopularMovies()
-            Either.Value(popularMovies.results.map { movieMapper.map(it) })
-        } catch (exception: Throwable) {
-            Either.Error(exception.localizedMessage ?: "Network error")
+    suspend fun fetchPopularMovies(fetchFromRemote: Boolean): Flow<Either<String, List<Movie>>> =
+        flow {
+            val localData = moviesDao.observePopularMovies().map { it.toDomain() }
+            emit(Either.Value(localData))
+            val isDbEmpty = moviesDao.observePopularMovies().isEmpty()
+            val shouldLoadFromCache = !isDbEmpty && fetchFromRemote
+            if (shouldLoadFromCache) {
+                return@flow
+            }
+            try {
+                val response = api.getPopularMovies().results.map { it.toEntity() }
+
+                //could delete database here to make sure the list wont get too long
+                //but it would be a bit heavier
+
+                moviesDao.insertPopularMovies(response)
+                emit(Either.Value(moviesDao.observePopularMovies().map { it.toDomain() }))
+            } catch (t: Throwable) {
+                emit(Either.Error(t.localizedMessage ?: "Network Error"))
+            }
         }
-    }
 
     fun observeMovieDetail(movieId: Int): Flow<MovieDetail?> =
         moviesDao.observeMovieDetail(movieId).map {
@@ -54,4 +67,5 @@ class MovieRepository @Inject constructor(
             moviesDao.insertMovieGenres(movie.genres.map { it.toEntity(movie.id) })
         }
     }
+
 }

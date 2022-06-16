@@ -53,6 +53,9 @@ class LoginViewModel @Inject constructor(
                     } else if (_viewState.value.password.isBlank()) {
                         _errorFlow.send(LoginSnackbarNotification.PasswordSnackbar)
                     } else if (error == AuthError.NETWORK_ERROR) {
+
+                        //always throws this error and never INVALID_CREDENTIALS
+
                         _errorFlow.send(LoginSnackbarNotification.NetworkError)
                     } else if (error == AuthError.INVALID_CREDENTIALS) {
                         _errorFlow.send(LoginSnackbarNotification.CredentialsError)
