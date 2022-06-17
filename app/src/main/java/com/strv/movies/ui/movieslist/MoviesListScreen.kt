@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
@@ -82,6 +83,7 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
                 .wrapContentWidth(align = Alignment.Start)
                 .padding(4.dp)
                 .clip(shape = MaterialTheme.shapes.medium)
+                .alpha(0.9f)
                 .background(MaterialTheme.colors.primary)
         ) {
             Icon(
