@@ -6,6 +6,7 @@ import com.strv.movies.extension.Either
 import com.strv.movies.model.CreateSessionBody
 import com.strv.movies.model.DeleteSessionBody
 import com.strv.movies.model.ValidateRequestTokenBody
+import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,7 +24,7 @@ class AuthRepository @Inject constructor(
             val requestToken = authApi.getRequestToken()
             if (requestToken.isSuccess.not()) {
                 Log.d("TAG", "Auth Error - Failed to get request token")
-                return Either.Error(AuthError.INVALID_CREDENTIALS)
+                return Either.Error(AuthError.NETWORK_ERROR)
             }
             val validationResponse = authApi.validateRequestToken(
                 ValidateRequestTokenBody(
@@ -45,10 +46,11 @@ class AuthRepository @Inject constructor(
             authDataStore.updateSessionToken(createSessionResponse.sessionToken)
             Log.d("TAG", "Auth successful")
             Either.Value(true)
+        } catch (e: HttpException) {
+            if (e.code() == 401) {
+                return Either.Error(AuthError.INVALID_CREDENTIALS)
+            } else Either.Error(AuthError.NETWORK_ERROR)
         } catch (t: Throwable) {
-
-            //Always throws this error and never invalid credentials
-
             Log.d("TAG", "Auth Error - Some network fail - ${t.localizedMessage}")
             Either.Error(AuthError.NETWORK_ERROR)
         }
