@@ -1,5 +1,6 @@
 package com.strv.movies.network
 
+import android.util.Log
 import androidx.room.withTransaction
 import com.strv.movies.data.dao.MoviesDao
 import com.strv.movies.data.entity.toDomain
@@ -8,6 +9,8 @@ import com.strv.movies.extension.Either
 import com.strv.movies.model.Movie
 import com.strv.movies.model.MovieDetail
 import com.strv.movies.model.MovieDetailDTO
+import com.strv.movies.model.Trailer
+import com.strv.movies.model.toDomain
 import com.strv.movies.model.toEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -30,6 +33,17 @@ class MovieRepository @Inject constructor(
             Either.Value(movie.title)
         } catch (exception: Throwable) {
             Either.Error(exception.localizedMessage ?: "Network error")
+        }
+    }
+
+    suspend fun fetchMovieTrailer(movieId: Int): Either<String, Trailer> {
+        Log.d("TAG", "Repository: Fetching trailer")
+        return try {
+            val trailer = api.getTrailer(movieId).trailers[0].toDomain()
+            Log.d("TRAILER", "Repository: ${trailer.key}")
+            Either.Value(trailer)
+        } catch (t: Throwable) {
+            Either.Error(t.localizedMessage ?: "Network error")
         }
     }
 
