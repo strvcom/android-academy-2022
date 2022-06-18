@@ -33,7 +33,8 @@ class MovieDetailViewModel @Inject constructor(
     val viewState = _viewState.asStateFlow()
 
     init {
-        observeMovieDetail()
+        Log.d("TAG", "ViewModel init triggered")
+        getData()
 
         viewModelScope.launch {
             movieRepository.fetchMovieDetail(movieId).fold(
@@ -53,39 +54,39 @@ class MovieDetailViewModel @Inject constructor(
     }
 
 
-    private fun observeMovieDetail() {
+    private fun getData() {
         viewModelScope.launch {
-            Log.d("TAG", "ViewModel: Observing values")
-
-            val movieTrailerDeferred = async {
-                movieRepository.fetchMovieTrailer(movieId).fold(
-                    { error ->
-                        Log.d("TAG", "ViewModel MovieTrailer Error")
-                        _viewState.update {
-                            MovieDetailViewState(error = error)
-                        }
-                    },
-                    {
-                        Log.d("TAG", "ViewModel MovieTrailer Success $it")
-//                    _movieTrailer.value?.copy(key = it.key)
-                        _viewState.value =
-                            _viewState.value.copy(trailer = it, loading = false, error = null)
-                    }
-                )
-            }
-            val movieDetailDeferred = async {
-                movieRepository.observeMovieDetail(movieId).collect { detail ->
-                    Log.d("TAG", "ViewModel MovieDetail collected $detail")
-//                _movieDetail.value = detail
-                    _viewState.value =
-                        _viewState.value.copy(movie = detail, loading = false, error = null)
-                }
-            }
-            movieTrailerDeferred.await()
+            val movieDetailDeferred = async { getDetail() }
+            val movieTrailerDeferred = async { fetchTrailer() }
             movieDetailDeferred.await()
+            movieTrailerDeferred.await()
         }
+
     }
 
+    private suspend fun fetchTrailer() {
+        movieRepository.fetchMovieTrailer(movieId).fold(
+            { error ->
+                Log.d("TAG", "ViewModel MovieTrailer Error")
+                _viewState.update {
+                    MovieDetailViewState(error = error)
+                }
+            },
+            {
+                Log.d("TAG", "ViewModel MovieTrailer Success $it")
+                _viewState.value =
+                    _viewState.value.copy(trailer = it, loading = false, error = null)
+            }
+        )
+    }
+
+    private suspend fun getDetail() {
+        movieRepository.observeMovieDetail(movieId).collect { detail ->
+            Log.d("TAG", "ViewModel MovieDetail collected $detail")
+            _viewState.value =
+                _viewState.value.copy(movie = detail, loading = false, error = null)
+        }
+    }
 
     fun updateVideoProgress(progress: Float) {
         _viewState.update { it.copy(videoProgress = progress) }
