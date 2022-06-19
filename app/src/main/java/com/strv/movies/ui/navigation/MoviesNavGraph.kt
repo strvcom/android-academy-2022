@@ -1,5 +1,6 @@
 package com.strv.movies.ui.navigation
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,6 +19,8 @@ import com.strv.movies.ui.profile.ProfileScreen
 fun MoviesNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    isDarkTheme: Boolean,
+    onChangeThemeClick: () -> Unit
 ) {
     NavHost(
         modifier = modifier,
@@ -29,7 +32,9 @@ fun MoviesNavGraph(
                 navigateToMovieDetail = { movieId ->
                     navController.navigate("${MoviesDestinations.MOVIE_DETAIL_ROUTE}/$movieId")
                 },
-                viewModel = hiltViewModel()
+                viewModel = hiltViewModel(),
+                isDarkTheme = isDarkTheme,
+                onChangeThemeClicked = onChangeThemeClick
             )
         }
         composable(
@@ -40,7 +45,17 @@ fun MoviesNavGraph(
                 }
             )
         ) {
-            MovieDetailScreen(viewModel = hiltViewModel())
+            MovieDetailScreen(
+                viewModel = hiltViewModel(),
+
+                isDarkTheme = isDarkTheme,
+                onChangeThemeClicked = onChangeThemeClick,
+                onNavigateBackClick = {
+                    navController.navigate(MoviesDestinations.MOVIES_LIST_ROUTE){
+                        popUpTo(route = MoviesDestinations.MOVIES_LIST_ROUTE)
+                    }
+                }
+            )
         }
         composable(
             route = MoviesDestinations.PROFILE_ROUTE
@@ -64,7 +79,9 @@ fun MoviesNavGraph(
                             inclusive = true
                         }
                     }
-                }
+                },
+                isDarkTheme = isDarkTheme,
+                onChangeThemeClicked = onChangeThemeClick
             )
         }
     }

@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import com.strv.movies.R
 import com.strv.movies.network.auth.LoginEvent
+import com.strv.movies.ui.components.CustomTopAppBar
 import com.strv.movies.ui.theme.login_facebookLogo
 import kotlinx.coroutines.launch
 
@@ -45,7 +46,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun LogInScreen(
     viewModel: LoginViewModel = viewModel(),
-    onSuccessfulLogin: () -> Unit
+    onSuccessfulLogin: () -> Unit,
+    isDarkTheme: Boolean,
+    onChangeThemeClicked: () -> Unit
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -73,6 +76,12 @@ fun LogInScreen(
     }
     Scaffold(
         scaffoldState = rememberScaffoldState(snackbarHostState = snackBarHostState),
+        topBar = {
+            CustomTopAppBar(
+                isDarkTheme = isDarkTheme,
+                onChangeThemeClick = onChangeThemeClicked
+            )
+        }
     ) {
         Column(
             modifier = Modifier

@@ -23,9 +23,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -49,31 +52,46 @@ import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.strv.movies.R
 import com.strv.movies.model.Movie
+import com.strv.movies.ui.components.CustomTopAppBar
 import com.strv.movies.ui.error.ErrorScreen
 import com.strv.movies.ui.loading.LoadingScreen
 
 @Composable
 fun MoviesListScreen(
     navigateToMovieDetail: (movieId: Int) -> Unit,
-    viewModel: MoviesListViewModel = viewModel()
+    viewModel: MoviesListViewModel = viewModel(),
+    isDarkTheme: Boolean,
+    onChangeThemeClicked: () -> Unit
 ) {
     val viewState by viewModel.viewState
-
+    val snackBarHostState = remember { SnackbarHostState() }
     val swipeRefreshState = rememberSwipeRefreshState(
         isRefreshing = viewState.isRefreshing
     )
-    if (viewState.loading) {
-        LoadingScreen()
-    } else if (viewState.error != null) {
-        ErrorScreen(errorMessage = viewState.error!!)
-    } else {
-        MoviesList(
-            movies = viewState.movies,
-            onMovieClick = navigateToMovieDetail,
-            refreshState = swipeRefreshState,
-            onRefresh = { viewModel.refreshData() }
-        )
+
+    Scaffold(
+        scaffoldState = rememberScaffoldState(snackbarHostState = snackBarHostState),
+        topBar = {
+            CustomTopAppBar(
+                isDarkTheme = isDarkTheme,
+                onChangeThemeClick = onChangeThemeClicked
+            )
+        }
+    ) {
+        if (viewState.loading) {
+            LoadingScreen()
+        } else if (viewState.error != null) {
+            ErrorScreen(errorMessage = viewState.error!!)
+        } else {
+            MoviesList(
+                movies = viewState.movies,
+                onMovieClick = navigateToMovieDetail,
+                refreshState = swipeRefreshState,
+                onRefresh = { viewModel.refreshData() }
+            )
+        }
     }
+
 }
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)

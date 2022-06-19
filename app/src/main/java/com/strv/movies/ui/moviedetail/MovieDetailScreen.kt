@@ -2,6 +2,7 @@ package com.strv.movies.ui.moviedetail
 
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +12,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -35,28 +39,46 @@ import com.strv.movies.R
 import com.strv.movies.model.Genre
 import com.strv.movies.model.MovieDetail
 import com.strv.movies.model.Trailer
+import com.strv.movies.ui.components.CustomTopAppBar
 import com.strv.movies.ui.error.ErrorScreen
 import com.strv.movies.ui.loading.LoadingScreen
 
 @Composable
 fun MovieDetailScreen(
-    viewModel: MovieDetailViewModel = viewModel()
+    viewModel: MovieDetailViewModel = viewModel(),
+    isDarkTheme: Boolean,
+    onChangeThemeClicked: () -> Unit,
+    onNavigateBackClick: () -> Unit
 ) {
-    val viewState by viewModel.viewState.collectAsState(MovieDetailViewState(loading = true))
-    Log.d("TAG", "DetailScreeen state: $viewState")
 
-    if (viewState.loading) {
-        LoadingScreen()
-    } else if (viewState.error != null) {
-        ErrorScreen(errorMessage = viewState.error!!)
-    } else {
-        viewState.movie?.let {
-            MovieDetail(
-                movie = it,
-                videoProgress = viewState.videoProgress,
-                setVideoProgress = viewModel::updateVideoProgress,
-                trailer = viewState.trailer
-            )
+    val viewState by viewModel.viewState.collectAsState(MovieDetailViewState(loading = true))
+    val snackBarHostState = remember { SnackbarHostState() }
+
+    Scaffold(
+        scaffoldState = rememberScaffoldState(snackbarHostState = snackBarHostState),
+        topBar = {
+            CustomTopAppBar(
+                isDarkTheme = isDarkTheme,
+                onChangeThemeClick = onChangeThemeClicked,
+                showNavIcon = true,
+                modifier = Modifier
+                    .padding(start = 12.dp)
+                    .clickable { onNavigateBackClick() }            )
+        }
+    ) {
+        if (viewState.loading) {
+            LoadingScreen()
+        } else if (viewState.error != null) {
+            ErrorScreen(errorMessage = viewState.error!!)
+        } else {
+            viewState.movie?.let {
+                MovieDetail(
+                    movie = it,
+                    videoProgress = viewState.videoProgress,
+                    setVideoProgress = viewModel::updateVideoProgress,
+                    trailer = viewState.trailer
+                )
+            }
         }
     }
 }

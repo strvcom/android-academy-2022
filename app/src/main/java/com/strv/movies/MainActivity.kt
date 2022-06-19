@@ -67,20 +67,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     Scaffold(
-                        topBar = {
-                            TopAppBar(
-                                title = {
-                                    Text(text = stringResource(id = R.string.app_name))
-                                },
-                                backgroundColor = MaterialTheme.colors.primary,
-                                actions = {
-                                    DarkLightModeSwitchIcon(
-                                        isDarkTheme = isDarkTheme,
-                                        changeTheme = viewModel::changeTheme
-                                    )
-                                }
-                            )
-                        },
                         bottomBar = {
                             AnimatedVisibility(
                                 visible = bottomBarVisibility,
@@ -96,7 +82,11 @@ class MainActivity : ComponentActivity() {
                     ) { paddingValues ->
                         MoviesNavGraph(
                             modifier = Modifier.padding(paddingValues),
-                            navController = navController
+                            navController = navController,
+                            isDarkTheme = isDarkTheme,
+                            onChangeThemeClick = {
+                                viewModel.changeTheme(!isDarkTheme)
+                            }
                         )
                     }
                 }
@@ -104,48 +94,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @Composable
-    private fun DarkLightModeSwitchIcon(
-        isDarkTheme: Boolean,
-        changeTheme: (isDarkTheme: Boolean) -> Unit
-    ) {
-        Icon(
-            modifier = Modifier
-                .padding(end = 12.dp)
-                .clickable(
-                    interactionSource = remember {
-                        MutableInteractionSource()
-                    },
-                    indication = rememberRipple(bounded = false),
-                ) {
-                    changeTheme(!isDarkTheme)
-                },
-            painter = painterResource(
-                id = if (isDarkTheme) {
-                    R.drawable.ic_light
-                } else {
-                    R.drawable.ic_dark
-                }
-            ),
-            contentDescription = null,
-        )
-    }
-
     private fun changeStatusBarColor(isDarkMode: Boolean) {
         val color = if (isDarkMode) R.color.statusBarDarkMode else R.color.statusBarLightMode
         window.statusBarColor = resources.getColor(color, this@MainActivity.theme)
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MoviesTheme {
-        Greeting("Android")
     }
 }
