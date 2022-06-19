@@ -44,6 +44,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshState
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.strv.movies.R
 import com.strv.movies.model.Movie
 import com.strv.movies.ui.error.ErrorScreen
@@ -56,6 +59,9 @@ fun MoviesListScreen(
 ) {
     val viewState by viewModel.viewState
 
+    val swipeRefreshState = rememberSwipeRefreshState(
+        isRefreshing = viewState.isRefreshing
+    )
     if (viewState.loading) {
         LoadingScreen()
     } else if (viewState.error != null) {
@@ -63,8 +69,47 @@ fun MoviesListScreen(
     } else {
         MoviesList(
             movies = viewState.movies,
-            onMovieClick = navigateToMovieDetail
+            onMovieClick = navigateToMovieDetail,
+            refreshState = swipeRefreshState,
+            onRefresh = { viewModel.refreshData() }
         )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
+@Composable
+fun MoviesList(
+    movies: List<Movie>,
+    onMovieClick: (movieId: Int) -> Unit,
+    refreshState: SwipeRefreshState,
+    onRefresh: () -> Unit
+) {
+    SwipeRefresh(state = refreshState,
+        onRefresh = { onRefresh() }) {
+        LazyVerticalGrid(
+            contentPadding = PaddingValues(8.dp),
+            cells = GridCells.Fixed(2)
+        ) {
+            items(movies) { movie ->
+                val state = remember {
+                    MutableTransitionState(false).apply {
+                        // Start the animation immediately.
+                        targetState = true
+                    }
+                }
+                AnimatedVisibility(
+                    visibleState = state,
+                    enter = fadeIn(animationSpec = tween(300)) + scaleIn(animationSpec = tween(300))
+                ) {
+                    MovieItem(
+                        movie = movie,
+                        modifier = Modifier
+                            .animateItemPlacement()
+                            .clickable { onMovieClick(movie.id) }
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -87,7 +132,8 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
                 .background(MaterialTheme.colors.primary)
         ) {
             Icon(
-                modifier = Modifier.background(MaterialTheme.colors.primaryVariant)
+                modifier = Modifier
+                    .background(MaterialTheme.colors.primaryVariant)
                     .padding(2.dp),
                 imageVector = Icons.Default.Star,
                 contentDescription = stringResource(R.string.movies_list_popularity_icon)
@@ -106,34 +152,3 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
-@Composable
-fun MoviesList(
-    movies: List<Movie>,
-    onMovieClick: (movieId: Int) -> Unit,
-) {
-    LazyVerticalGrid(
-        contentPadding = PaddingValues(8.dp),
-        cells = GridCells.Fixed(2)
-    ) {
-        items(movies) { movie ->
-            val state = remember {
-                MutableTransitionState(false).apply {
-                    // Start the animation immediately.
-                    targetState = true
-                }
-            }
-            AnimatedVisibility(
-                visibleState = state,
-                enter = fadeIn(animationSpec = tween(300)) + scaleIn(animationSpec = tween(300))
-            ) {
-                MovieItem(
-                    movie = movie,
-                    modifier = Modifier
-                        .animateItemPlacement()
-                        .clickable { onMovieClick(movie.id) }
-                )
-            }
-        }
-    }
-}

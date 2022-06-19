@@ -18,21 +18,21 @@ import javax.inject.Inject
 class MoviesListViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ) : ViewModel() {
-    private val _viewState = mutableStateOf(MoviesListViewState(loading = true))
+    private val _viewState = mutableStateOf(MoviesListViewState())
     val viewState = _viewState
 
     init {
-        observePopularMovies()
+        observePopularMovies(false)
     }
 
-    private fun observePopularMovies() {
-    _viewState.value = viewState.value.copy(loading = true)
+    private fun observePopularMovies(fromNetwork: Boolean) {
+        _viewState.value = viewState.value.copy(loading = fromNetwork)
         viewModelScope.launch {
-            movieRepository.fetchPopularMovies(true).collect { response ->
+            movieRepository.fetchPopularMovies(fromNetwork).collect { response ->
                 response.fold(
                     { error ->
                         Log.d("TAG", "PopularMovies Error: $error")
-                        _viewState.value = viewState.value.copy(error = error, loading = false)
+                        _viewState.value = viewState.value.copy(error = error, loading = false,)
                     },
                     { list ->
                         _viewState.value = viewState.value.copy(movies = list, loading = false)
@@ -40,6 +40,13 @@ class MoviesListViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun refreshData() {
+        Log.d("REFRESH", "MoviesViewModel refresh triggered")
+        _viewState.value = _viewState.value.copy(isRefreshing = true)
+        observePopularMovies(true)
+        _viewState.value = _viewState.value.copy(isRefreshing = false)
     }
 
 }

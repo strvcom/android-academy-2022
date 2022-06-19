@@ -95,4 +95,7 @@ dependencies {
 
     //Accompanist
     implementation("com.google.accompanist:accompanist-permissions:0.17.0")
+
+    // SwipeRefresh
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.24.2-alpha"
 }

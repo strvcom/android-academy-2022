@@ -33,4 +33,7 @@ interface MoviesDao {
     @Query("SELECT * FROM movie")
     suspend fun observePopularMovies(): List<MovieEntity>
 
+    @Query("DELETE FROM movie")
+    suspend fun deleteMovies()
+
 }

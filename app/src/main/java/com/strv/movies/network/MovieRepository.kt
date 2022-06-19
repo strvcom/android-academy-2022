@@ -49,26 +49,27 @@ class MovieRepository @Inject constructor(
 
     suspend fun fetchPopularMovies(fetchFromRemote: Boolean): Flow<Either<String, List<Movie>>> =
         flow {
-            val localData = moviesDao.observePopularMovies().map { it.toDomain() }
-            emit(Either.Value(localData))
             val isDbEmpty = moviesDao.observePopularMovies().isEmpty()
-            val shouldLoadFromCache = !isDbEmpty && fetchFromRemote
-            if (shouldLoadFromCache) {
-                return@flow
-            }
-            try {
-                val response = api.getPopularMovies().results.map { it.toEntity() }
-
-                //could delete database here to make sure the list wont get too long
-                //but it would be a bit heavier
-
-                moviesDao.insertPopularMovies(response)
-                val cachedMovies = moviesDao.observePopularMovies()
-                    .map { it.toDomain() }
+            if (fetchFromRemote || isDbEmpty) {
+                try {
+                    val response = api.getPopularMovies().results.map { it.toEntity() }
+                    if (response.isNotEmpty()) {
+                        moviesDao.deleteMovies()
+                    }
+                    moviesDao.insertPopularMovies(response)
+                    val cachedMovies = moviesDao.observePopularMovies()
+                        .map { it.toDomain() }
+                        .sortedByDescending { it.popularity }
+                    emit(Either.Value(cachedMovies))
+                    Log.d("REFRESH", "Repository: Loaded from network")
+                } catch (t: Throwable) {
+                    emit(Either.Error(t.localizedMessage ?: "Network Error"))
+                }
+            } else {
+                val localData = moviesDao.observePopularMovies().map { it.toDomain() }
                     .sortedByDescending { it.popularity }
-                emit(Either.Value(cachedMovies))
-            } catch (t: Throwable) {
-                emit(Either.Error(t.localizedMessage ?: "Network Error"))
+                emit(Either.Value(localData))
+                Log.d("REFRESH", "Repository: Loaded from cache")
             }
         }
 
