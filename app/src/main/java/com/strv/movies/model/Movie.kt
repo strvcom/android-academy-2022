@@ -19,7 +19,7 @@ data class MovieDTO(
     val title: String,
     @Json(name = "poster_path")
     val posterPath: String,
-    @Json(name = "popularity")
+    @Json(name = "vote_average")
     val popularity: Double
 )
 
